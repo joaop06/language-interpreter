@@ -1,0 +1,42 @@
+{
+  "license": "ISC",
+  "main": "app.ts",
+  "version": "1.0.0",
+  "name": "interpreter",
+  "author": "João Pedro",
+  "homepage": "https://github.com/joaop06/interpreter#readme",
+  "description": "Interpreter is a library designed to optimize the management of predefined messages in several languages, simplifying translations in multilingual applications. It supports the mapping of message files in JSON format, dynamic language resolution and fallback handling for missing translations. Ideal for standardizing and optimizing localization workflows in projects of any scale.",
+  "scripts": {
+    "test": "vitest",
+    "clean:build": "rimraf dist",
+    "build": "npm run clean:build && tsc -p tsconfig.build.json",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix && prettier --write \"src/**/*.ts\""
+  },
+  "dependencies": {
+    "rimraf": "^6.0.1",
+    "vitest": "^3.0.5"
+  },
+  "devDependencies": {
+    "eslint": "^9.20.1",
+    "typescript": "^5.7.3",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-config-prettier": "^10.0.1",
+    "@typescript-eslint/parser": "^8.24.0",
+    "@typescript-eslint/eslint-plugin": "^8.24.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joaop06/interpreter.git"
+  },
+  "keywords": [
+    "i18n",
+    "nodejs",
+    "messages",
+    "translation",
+    "localization",
+    "multilingual"
+  ],
+  "bugs": {
+    "url": "https://github.com/joaop06/interpreter/issues"
+  }
+}
