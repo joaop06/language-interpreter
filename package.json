@@ -17,12 +17,13 @@
     "vitest": "^3.0.5"
   },
   "devDependencies": {
-    "eslint": "^9.20.1",
-    "typescript": "^5.7.3",
-    "eslint-plugin-prettier": "^5.2.3",
-    "eslint-config-prettier": "^10.0.1",
+    "@types/node": "^22.13.4",
+    "@typescript-eslint/eslint-plugin": "^8.24.0",
     "@typescript-eslint/parser": "^8.24.0",
-    "@typescript-eslint/eslint-plugin": "^8.24.0"
+    "eslint": "^9.20.1",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "typescript": "^5.7.3"
   },
   "repository": {
     "type": "git",
