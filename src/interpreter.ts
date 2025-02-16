@@ -1,47 +1,34 @@
 import { Logger } from "./logger";
+import { Exception } from "./exception";
+import { FileLoader } from "./files/file-loader";
 import { ArgsType } from "./types/args.type";
-import { TypeMessage } from "./types/message.type";
 import { Config } from "./interfaces/config.interface";
 import { LanguagesEnum, LanguagesType } from "./types/languages";
-import { TranslationKeys } from "./types/translation-keys.type";
-import { FileLoader } from "./file-loader";
+import { FileStructureType } from "./files/file-structure";
+import { InterpreterProps } from "./interpreter-props";
 
 export class Interpreter {
     private logger: Logger;
 
-    private _fileLoader: FileLoader<any>;
-
-    private _language: LanguagesType = LanguagesEnum.EN;
+    private props: InterpreterProps;
 
     constructor(
-        private options: Config,
+        private config: Config,
     ) {
+        const { basePath } = this.config;
         this.logger = new Logger('Interpreter');
-        this.createDynamicLoader(options.basePath);
+        this.props = new InterpreterProps(basePath, this.config);
     }
 
-    get language(): LanguagesType {
-        return this._language;
+    get language(): typeof this.props.languages {
+        return this.props.language;
     }
-    set language(language: LanguagesType) {
-        this._language = language;
-    }
-
-    private createDynamicLoader(basePath: string) {
-        const structure = new FileLoader(basePath).getStructure();
-
-        type Structure = typeof structure;
-        this._fileLoader = new FileLoader<Structure>(basePath);
+    set language(value: typeof this.props.languages) {
+        this.props.language = value;
     }
 
     translate(code: string, options: any = {}): string | null {
-
-        if (!code) {
-            const error = 'The code from message is missing';
-
-            this.logger.error(error);
-            throw new Error(error);
-        }
+        if (!code) new Exception('The code from message is missing');
 
         const keys = code?.split('.');
         const { lang, args } = options;
@@ -55,7 +42,7 @@ export class Interpreter {
                 currPath = currPath[key];
 
             } else {
-                throw new Error(`Chave de tradução não encontrada: ${code}`);
+                new Exception(`Key not found: ${code}`);
             }
         }
 
@@ -68,15 +55,13 @@ export class Interpreter {
             //   { lang },
             // );
 
-            this.logger.error(`${'errorMessage'}: ${code}`);
-            throw new Error('errorMessage');
+            new Exception(`${'errorMessage'}: ${code}`);
         }
 
         if (message.includes('{{') && message.includes('}}') && !args) {
             // const errorMessage = await this.translate('ERRORS.COMMON.BAD_REQUEST', { lang });
 
-            this.logger.error(`${'errorMessage'}: ${code}`);
-            throw new Error('errorMessage');
+            new Exception(`${'errorMessage'}: ${code}`);
         }
 
         // Realiza a substituição dos placeholders (ex: {{field}})

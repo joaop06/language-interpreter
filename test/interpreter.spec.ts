@@ -1,23 +1,35 @@
-import { it, expect } from 'vitest';
+import { it, expect, describe, beforeAll } from 'vitest';
 import { Interpreter } from '../src/interpreter';
 import { LanguagesEnum } from '../src/types/languages';
+import { Config } from 'src/interfaces/config.interface';
+import { beforeEach } from 'node:test';
 
+describe('Interpreter instance', () => {
 
-it('should be return a Interpreter instance', () => {
-    const interpreter = new Interpreter('./locales');
-    expect(interpreter).toBeInstanceOf(Interpreter);
-});
+    let config: Config;
 
-it('should be define language property with default value', () => {
-    const interpreter = new Interpreter('./locales');
-    expect(interpreter.language).toEqual(LanguagesEnum.EN);
-    expect(interpreter.language).not.toEqual(LanguagesEnum.PT_BR);
-});
+    beforeAll(() => {
+        config = {
+            basePath: __dirname + '/locales'
+        };
+    })
 
-it('should be set a different language', () => {
-    const interpreter = new Interpreter('./locales');
+    it('should be return a Interpreter', () => {
+        const interpreter = new Interpreter(config);
+        expect(interpreter).toBeInstanceOf(Interpreter);
+    });
 
-    interpreter.language = LanguagesEnum.ES;
-    expect(interpreter.language).toEqual(LanguagesEnum.ES);
-    expect(interpreter.language).not.toEqual(LanguagesEnum.PT_BR);
+    it('should be define language property with default value', () => {
+        const interpreter = new Interpreter(config);
+        expect(interpreter.language).toEqual(LanguagesEnum.EN);
+        expect(interpreter.language).not.toEqual(LanguagesEnum.PT_BR);
+    });
+
+    it('should be set a different language', () => {
+        const interpreter = new Interpreter(config);
+
+        interpreter.language = LanguagesEnum.ES;
+        expect(interpreter.language).toEqual(LanguagesEnum.ES);
+        expect(interpreter.language).not.toEqual(LanguagesEnum.PT_BR);
+    });
 });

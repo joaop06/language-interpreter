@@ -1,8 +1,10 @@
-import { Locales } from "../types/locales";
-import { OrganizingFiles } from "../types/organizing-files.type";
+import { LogConfig } from "./log-config.interface";
+import { FileStructureConfig } from "./file-structure-config.interface";
 
-export interface Config {
-    locales: Locales;
+
+export type Config = FileStructureConfig & LogConfig;
+
+export interface BaseConfig {
     basePath: string;
-    organizingFiles: OrganizingFiles;
+    defaultLanguage?: string;
 }
