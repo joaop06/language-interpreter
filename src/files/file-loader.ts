@@ -24,8 +24,7 @@ export class FileLoader<T extends FileStructureType> {
 
         if (!fullPath) new Exception(`File not found: ${filePath}`);
 
-        // return readFileSync(fullPath, 'utf-8');
-        return require(fullPath);
+        return require(resolve(fullPath));
     }
 
     private resolvePath(filePath: string, structure: any): string | null {

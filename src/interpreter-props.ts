@@ -34,7 +34,7 @@ export class InterpreterProps {
 
 
     defineLanguages() {
-        console.log(this.structure);
+        // console.log(this.structure);
     }
 }
 
