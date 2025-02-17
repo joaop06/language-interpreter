@@ -11,13 +11,13 @@ export class InterpreterProps {
     fileLoader: FileLoader<FileStructureType>;
 
     _languages: any;
-    _language: typeof this._languages = 'en';
+    _language: typeof this._languages;
 
     constructor(
         path: string,
         private config: Config,
     ) {
-        const { defaultLanguage } = this.config;
+        const { defaultLanguage = 'en' } = this.config;
 
         this._language = defaultLanguage;
         this.fileLoader = FileLoader.init(path);
