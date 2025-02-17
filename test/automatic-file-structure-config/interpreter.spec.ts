@@ -1,8 +1,7 @@
+import { Interpreter } from '../../src/interpreter';
 import { it, expect, describe, beforeAll } from 'vitest';
-import { Interpreter } from '../src/interpreter';
-import { LanguagesEnum } from '../src/types/languages';
 import { Config } from 'src/interfaces/config.interface';
-import { beforeEach } from 'node:test';
+import { LanguagesEnum } from '../../src/types/languages.type';
 
 describe('Interpreter instance', () => {
 

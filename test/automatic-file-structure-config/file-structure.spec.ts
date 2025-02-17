@@ -1,5 +1,5 @@
 import { it, expect, describe } from 'vitest';
-import { FileStructure } from '../src/files/file-structure';
+import { FileStructure } from '../../src/files/file-structure';
 
 describe('FileStructure', () => {
 

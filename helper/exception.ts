@@ -1,4 +1,4 @@
-import { Logger } from "./logger";
+import { Logger } from "../helper/logger";
 
 export class Exception extends Error {
     constructor(message: string, cause?: string) {

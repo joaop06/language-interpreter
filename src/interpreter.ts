@@ -1,10 +1,6 @@
-import { Logger } from "./logger";
-import { Exception } from "./exception";
-import { FileLoader } from "./files/file-loader";
-import { ArgsType } from "./types/args.type";
+import { Logger } from "../helper/logger";
+import { Exception } from "../helper/exception";
 import { Config } from "./interfaces/config.interface";
-import { LanguagesEnum, LanguagesType } from "./types/languages";
-import { FileStructureType } from "./files/file-structure";
 import { InterpreterProps } from "./interpreter-props";
 
 export class Interpreter {
@@ -88,9 +84,4 @@ export class Interpreter {
 
         return message;
     };
-}
-
-export type TranslateOptionsType<T> = {
-    args?: ArgsType<any>,
-    lang: LanguagesType,
 }

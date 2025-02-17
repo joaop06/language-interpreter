@@ -1,6 +1,5 @@
 import { resolve } from 'path';
-import { readFileSync, existsSync } from 'fs';
-import { Exception } from '../exception';
+import { Exception } from '../../helper/exception';
 import { FileStructure, FileStructureType } from './file-structure';
 
 export class FileLoader<T extends FileStructureType> {
