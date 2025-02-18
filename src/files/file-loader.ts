@@ -13,8 +13,8 @@ export class FileLoader<T extends FileStructureType> {
         this.basePath = resolve(basePath);
     }
 
-    static init(basePath: string): FileLoader<any> {
-        const structure = FileStructure.createFileStructure(basePath);
+    static init(basePath: string, outDirTypeDefinitionFiles: string): FileLoader<any> {
+        const structure = FileStructure.createFileStructure(basePath, outDirTypeDefinitionFiles);
         return new FileLoader<typeof structure>(basePath, structure);
     }
 
@@ -35,6 +35,6 @@ export class FileLoader<T extends FileStructureType> {
             current = current[part];
         }
 
-        return typeof current === 'string' ? current : null;
+        return typeof current.path === 'string' ? current.path : null;
     }
 }

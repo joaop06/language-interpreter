@@ -8,6 +8,8 @@ export class InterpreterProps {
 
     structure: any;
 
+    outDirTypeDefinitionFiles: string;
+
     fileLoader: FileLoader<FileStructureType>;
 
     _languages: any;
@@ -17,10 +19,13 @@ export class InterpreterProps {
         path: string,
         private config: Config,
     ) {
-        const { defaultLanguage = 'en' } = this.config;
+        const { defaultLanguage = 'en', outDirTypeDefinitionFiles } = this.config;
 
         this._language = defaultLanguage;
-        this.fileLoader = FileLoader.init(path);
+        this.outDirTypeDefinitionFiles = outDirTypeDefinitionFiles;
+
+
+        this.fileLoader = FileLoader.init(path, outDirTypeDefinitionFiles);
         this.structure = this.fileLoader.structure;
 
         this.logger = new Logger('InterpreterProps');
