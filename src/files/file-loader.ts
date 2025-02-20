@@ -4,37 +4,35 @@ import { FileStructure, FileStructureType } from './file-structure';
 
 export class FileLoader<T extends FileStructureType> {
 
-    private basePath: string;
-
     constructor(
-        basePath: string,
+        public basePath: string,
         public structure: T,
     ) {
         this.basePath = resolve(basePath);
     }
 
-    static init(basePath: string, outDirTypeDefinitionFiles: string): FileLoader<any> {
-        const structure = FileStructure.createFileStructure(basePath, outDirTypeDefinitionFiles);
+    static init(basePath: string): FileLoader<any> {
+        const structure = FileStructure.createFileStructure(basePath);
         return new FileLoader<typeof structure>(basePath, structure);
     }
 
-    public readFile(filePath: string): string {
-        const fullPath = this.resolvePath(filePath, this.structure);
+    public readFile(fileName: string): string {
+        const fullPath = this.resolvePath(fileName, this.structure);
 
-        if (!fullPath) new Exception(`File not found: ${filePath}`);
+        if (!fullPath) new Exception(`File not found: ${fileName}`);
 
         return require(resolve(fullPath));
     }
 
-    private resolvePath(filePath: string, structure: any): string | null {
+    private resolvePath(fileName: string, structure: any): string | null {
         let current = structure;
-        const parts = filePath.split('.');
+        const parts = fileName.split('.');
 
         for (let part of parts) {
             if (!current[part]) return null;
             current = current[part];
         }
 
-        return typeof current.path === 'string' ? current.path : null;
+        return typeof current === 'string' ? current : null;
     }
 }

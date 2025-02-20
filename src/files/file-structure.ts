@@ -3,10 +3,7 @@ import { Exception } from 'helper/exception';
 import { readdirSync, writeFileSync, existsSync } from 'fs';
 
 export type FileStructureType = {
-    [key: string]: FileStructureType | {
-        path: string;
-        typeDefinition: Promise<any>;
-    }
+    [key: string]: FileStructureType | string;
 };
 
 export class FileStructure {
@@ -16,7 +13,7 @@ export class FileStructure {
      * @param {string} dir 
      * @returns {FileStructureType}
      */
-    static createFileStructure(dir: string, outDirTypeDefinitionFiles: string): FileStructureType {
+    static createFileStructure(dir: string): FileStructureType {
 
         // Recursive function to access several levels
         const recursiveFileStructure = (dir: string): FileStructureType => {
@@ -31,30 +28,21 @@ export class FileStructure {
                     if (isDirectory) acc[name] = recursiveFileStructure(entryPath);
 
                     if (!isDirectory) {
+                        acc[name] = entryPath;
                         const readFile = require(entryPath);
 
                         const toTitleCase = (str: string) => str.replace(/\b\w/g, char => char.toUpperCase()).replaceAll('-', '_').replaceAll('.', '_');
 
-                        if (!existsSync(outDirTypeDefinitionFiles)) {
-                            new Exception(`Type definition files directory not found: ${outDirTypeDefinitionFiles}`);
+                        if (!existsSync(dir)) {
+                            new Exception(`Type definition files directory not found: ${dir}`);
                         }
 
                         const nameTitle = toTitleCase(name);
                         const content = this.generateTypeDefinationJSON(readFile);
                         const typeDefinitionContent = `export type ${nameTitle} = {\n${content}\n};`;
 
-                        const typeDirPath = join(outDirTypeDefinitionFiles, `${name}.d.ts`);
-
-
+                        const typeDirPath = join(dir, `${name}.d.ts`);
                         writeFileSync(typeDirPath, typeDefinitionContent, "utf-8");
-
-
-
-                        const typeDefinition = import(typeDirPath);
-                        acc[name] = {
-                            typeDefinition,
-                            path: entryPath,
-                        };
                     }
                 }
 

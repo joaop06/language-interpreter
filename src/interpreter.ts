@@ -11,9 +11,8 @@ export class Interpreter {
     constructor(
         private config: Config,
     ) {
-        const { basePath } = this.config;
         this.logger = new Logger('Interpreter');
-        this.props = new InterpreterProps(basePath, this.config);
+        this.props = new InterpreterProps(this.config);
     }
 
     get language(): typeof this.props.languages {
@@ -26,13 +25,13 @@ export class Interpreter {
     translate(code: string, options: any = {}): string | null {
         if (!code) new Exception('The code from message is missing');
 
-        const keys = code?.split('.');
         const { lang, args } = options;
+        if (!!lang && this.language !== lang) this.language = lang;
 
-        const file = require(`./languages/${lang}.json`);
+        const file = this.props.fileLoader.readFile(this.language);
 
         let currPath = file;
-
+        const keys = code?.split('.');
         for (const key of keys) {
             if (currPath[key]) {
                 currPath = currPath[key];
@@ -46,18 +45,11 @@ export class Interpreter {
         let message: string = currPath;
 
         if (typeof message !== 'string') {
-            // const errorMessage = await this.translate(
-            //   'ERRORS.COMMON.INVALID_TRANSLATE_CODE',
-            //   { lang },
-            // );
-
-            new Exception(`${'errorMessage'}: ${code}`);
+            new Exception(`Message path is not a string: ${code}`);
         }
 
         if (message.includes('{{') && message.includes('}}') && !args) {
-            // const errorMessage = await this.translate('ERRORS.COMMON.BAD_REQUEST', { lang });
-
-            new Exception(`${'errorMessage'}: ${code}`);
+            new Exception(`Arguments are needed for the desired message: ${code}`);
         }
 
         // Realiza a substituição dos placeholders (ex: {{field}})

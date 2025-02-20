@@ -10,7 +10,6 @@ describe('Interpreter instance', () => {
     beforeAll(() => {
         config = {
             basePath: __dirname + '/locales',
-            outDirTypeDefinitionFiles: __dirname + '/type-definition-files',
         };
     })
 
