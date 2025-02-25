@@ -3,17 +3,31 @@ import { Exception } from "../helper/exception";
 import { Config } from "./interfaces/config.interface";
 import { InterpreterProps } from "./interpreter-props";
 
-export class Interpreter {
+export * from "./files/generate-json-types";
+export class Interpreter<T = never> {
     private logger: Logger;
 
-    private props: InterpreterProps;
+    private props: InterpreterProps<T>;
 
     constructor(
         private config: Config,
     ) {
         this.logger = new Logger('Interpreter');
-        this.props = new InterpreterProps(this.config);
+        this.props = new InterpreterProps<T>(this.config);
+
+        this.checkType();
     }
+
+    private checkType() {
+        if (this.isTypeMissing()) {
+            new Exception('Type T was not specified in the Interpreter instance');
+        }
+    }
+
+    private isTypeMissing(): boolean {
+        return false as T extends never ? true : false;
+    }
+
 
     get language(): typeof this.props.languages {
         return this.props.language;

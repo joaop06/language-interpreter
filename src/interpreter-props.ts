@@ -2,8 +2,9 @@ import { Logger } from "../helper/logger";
 import { FileLoader } from "./files/file-loader";
 import { Config } from "./interfaces/config.interface";
 import { FileStructureType } from "./files/file-structure";
+import { generateJsonTypes } from "./files/generate-json-types";
 
-export class InterpreterProps {
+export class InterpreterProps<T> {
     private logger: Logger;
 
     structure: any;
@@ -21,6 +22,7 @@ export class InterpreterProps {
             defaultLanguage = 'en',
         } = this.config;
 
+        // Sets the default language if not provided
         this._language = defaultLanguage;
 
 

@@ -1,3 +1,4 @@
+import { JsonTypes } from './locales/json-types';
 import { Interpreter } from '../../src/interpreter';
 import { it, expect, describe, beforeAll } from 'vitest';
 import { Config } from 'src/interfaces/config.interface';
