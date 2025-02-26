@@ -1,0 +1,10 @@
+{
+    "COMMON": {
+        "NOT_FOUND": "Resource not found",
+        "BAD_REQUEST": "Request execution failed",
+        "CONFLICT": "Resource processing conflict",
+        "ALREADY_EXISTS": "Resource already exists",
+        "INTERNAL_SERVER_ERROR": "Internal server error",
+        "INVALID_TRANSLATE_CODE": "Invalid translation code"
+    }
+}

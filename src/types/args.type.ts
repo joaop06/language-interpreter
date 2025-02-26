@@ -1,5 +1,5 @@
 import { TypeMessage } from "./message.type";
-import { TranslationKeys } from "./translation-keys.type";
+import { InterpreterCodeKeys } from "./interpreter-code-keys.type";
 
 export type ArgsType<T extends TypeMessage> =
     (
@@ -12,5 +12,5 @@ export type ArgsType<T extends TypeMessage> =
     & {
         field?: any,
         resource?: any,
-        code?: TranslationKeys<T>,
+        code?: InterpreterCodeKeys<T>,
     };

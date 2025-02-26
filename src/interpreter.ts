@@ -1,48 +1,29 @@
-import { Logger } from "../helper/logger";
+export * from "./files/generate-types";
 import { Exception } from "../helper/exception";
 import { Config } from "./interfaces/config.interface";
 import { InterpreterProps } from "./interpreter-props";
+import { InterpreterCodeKeys } from "./types/interpreter-code-keys.type";
 
-export * from "./files/generate-json-types";
-export class Interpreter<T = never> {
-    private logger: Logger;
+export class Interpreter<T> extends InterpreterProps<T> {
 
-    private props: InterpreterProps<T>;
-
-    constructor(
-        private config: Config,
-    ) {
-        this.logger = new Logger('Interpreter');
-        this.props = new InterpreterProps<T>(this.config);
-
-        this.checkType();
+    constructor(config: Config) {
+        super(config);
     }
 
-    private checkType() {
-        if (this.isTypeMissing()) {
-            new Exception('Type T was not specified in the Interpreter instance');
-        }
+    get language(): typeof this.languages {
+        return super.language;
+    }
+    set language(value: typeof this.languages) {
+        super.language = value;
     }
 
-    private isTypeMissing(): boolean {
-        return false as T extends never ? true : false;
-    }
-
-
-    get language(): typeof this.props.languages {
-        return this.props.language;
-    }
-    set language(value: typeof this.props.languages) {
-        this.props.language = value;
-    }
-
-    translate(code: string, options: any = {}): string | null {
+    translate(code: InterpreterCodeKeys<T>, options: any = {}): string | null {
         if (!code) new Exception('The code from message is missing');
 
         const { lang, args } = options;
         if (!!lang && this.language !== lang) this.language = lang;
 
-        const file = this.props.fileLoader.readFile(this.language);
+        const file = this.fileLoader.readFile(this.language);
 
         let currPath = file;
         const keys = code?.split('.');

@@ -1,8 +1,7 @@
-import { JsonTypes } from './locales/json-types';
 import { Interpreter } from '../../src/interpreter';
 import { it, expect, describe, beforeAll } from 'vitest';
-import { Config } from 'src/interfaces/config.interface';
-import { LanguagesEnum } from '../../src/types/languages.type';
+import { Config } from '../../src/interfaces/config.interface';
+import { JsonTypes, JsonFilesEnum } from './locales/json-types';
 
 describe('Interpreter instance', () => {
 
@@ -20,16 +19,16 @@ describe('Interpreter instance', () => {
     });
 
     it('should be define language property with default value', () => {
-        const interpreter = new Interpreter(config);
-        expect(interpreter.language).toEqual(LanguagesEnum.EN);
-        expect(interpreter.language).not.toEqual(LanguagesEnum.PT_BR);
+        const interpreter = new Interpreter<JsonTypes>(config);
+        expect(interpreter.language).toEqual(JsonFilesEnum.EN);
+        expect(interpreter.language).not.toEqual(JsonFilesEnum.PT_BR);
     });
 
     it('should be set a different language', () => {
-        const interpreter = new Interpreter(config);
+        const interpreter = new Interpreter<JsonTypes>(config);
 
-        interpreter.language = LanguagesEnum.ES;
-        expect(interpreter.language).toEqual(LanguagesEnum.ES);
-        expect(interpreter.language).not.toEqual(LanguagesEnum.PT_BR);
+        interpreter.language = JsonFilesEnum.ES;
+        expect(interpreter.language).toEqual(JsonFilesEnum.ES);
+        expect(interpreter.language).not.toEqual(JsonFilesEnum.PT_BR);
     });
 });

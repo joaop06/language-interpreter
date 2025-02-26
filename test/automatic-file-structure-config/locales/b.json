@@ -1,0 +1,6 @@
+{
+    "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK": "{{resource}} found successfully",
+    "CREATED": "{{resource}} created successfully",
+    "DELETED": "{{resource}} deleted successfully",
+    "UPDATED": "{{resource}} updated successfully"
+}

@@ -1,6 +1,10 @@
-import { resolve } from 'path';
+import { join, resolve } from 'path';
 import { Exception } from '../../helper/exception';
-import { FileStructure, FileStructureType } from './file-structure';
+import { readdirSync } from 'fs';
+
+export type FileStructureType = {
+    [key: string]: FileStructureType | string;
+};
 
 export class FileLoader<T extends FileStructureType> {
 
@@ -12,7 +16,7 @@ export class FileLoader<T extends FileStructureType> {
     }
 
     static init(basePath: string): FileLoader<any> {
-        const structure = FileStructure.createFileStructure(basePath);
+        const structure = this.createFileStructure(basePath);
         return new FileLoader<typeof structure>(basePath, structure);
     }
 
@@ -34,5 +38,34 @@ export class FileLoader<T extends FileStructureType> {
         }
 
         return typeof current === 'string' ? current : null;
+    }
+
+    /**
+     * Create the file structure using a
+     * recursive function to create a file structure at any level
+     * @param {string} dir 
+     * @returns {FileStructureType}
+     */
+    static createFileStructure(dir: string): FileStructureType {
+
+        // Recursive function to access several levels
+        const recursiveFileStructure = (dir: string): FileStructureType => {
+            const entries = readdirSync(dir, { withFileTypes: true });
+
+            return entries.reduce<FileStructureType>((acc, entry) => {
+                const entryPath = join(dir, entry.name);
+                const isDirectory = entry.isDirectory();
+                const name = entry.name.replace('.json', '');
+
+                if (isDirectory || entry.name.endsWith('.json')) {
+                    if (!isDirectory) acc[name] = entryPath;
+                    else acc[name] = recursiveFileStructure(entryPath);
+                }
+
+                return acc;
+            }, {});
+        }
+
+        return recursiveFileStructure(dir);
     }
 }

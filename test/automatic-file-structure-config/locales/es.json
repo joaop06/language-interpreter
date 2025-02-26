@@ -1,12 +1,4 @@
 {
-    "SUCCESS": {
-        "RESOURCE": {
-            "CREATED": "{{resource}} creado exitosamente",
-            "FOUND": "{{resource}} encontrado exitosamente",
-            "DELETED": "{{resource}} eliminado exitosamente",
-            "UPDATED": "{{resource}} actualizado exitosamente"
-        }
-    },
     "ERRORS": {
         "MODULES": {
             "APPOINTMENTS": {
@@ -14,14 +6,6 @@
                     "OVER_LAPPING": "Otra cita se solapa con las fechas de esta cita"
                 }
             }
-        },
-        "COMMON": {
-            "NOT_FOUND": "Recurso no encontrado",
-            "ALREADY_EXISTS": "El recurso ya existe",
-            "CONFLICT": "Conflicto al procesar el recurso",
-            "INTERNAL_SERVER_ERROR": "Error interno del servidor",
-            "BAD_REQUEST": "Fallo en la ejecución de la solicitud",
-            "INVALID_TRANSLATE_CODE": "Código de traducción no válido"
         },
         "VALIDATION": {
             "REQUIRED": "El campo {{field}} es obligatorio",

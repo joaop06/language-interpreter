@@ -1,15 +1,15 @@
 import { join } from 'path';
 import { existsSync, readdirSync } from 'fs';
 import { it, expect, describe } from 'vitest';
-import { generateJsonTypes } from '../../src/interpreter';
+import { generateTypes } from '../../src/interpreter';
 
-describe('GenerateJsonTypes', () => {
+describe('generateTypes', () => {
 
 
     it('must create the types based on the JSON files', () => {
         const dir = __dirname + '/locales';
 
-        generateJsonTypes(dir);
+        generateTypes(dir);
 
         const recursiveFiles = (dir: string): void => {
             readdirSync(dir, { withFileTypes: true }).forEach(entry => {

@@ -3,11 +3,13 @@ import { Exception } from "../../helper/exception";
 import { existsSync, readdirSync, writeFileSync } from "fs";
 
 
-export const generateJsonTypes = (baseDir: string) => {
+export const generateTypes = (baseDir: string) => {
 
     /** Content that will be generated in the file with the types */
+    const fileNames = [];
+    const nameEnums = [];
     const nameTypes = [];
-    let typesDefinitionContent: string = '';
+    let typeFilesDefinitionContent: string = '';
 
     // Recursive function to access several levels
     const recursiveFileStructure = (dir: string): void => {
@@ -60,16 +62,38 @@ export const generateJsonTypes = (baseDir: string) => {
 
                     // Convert the JSON structure in type
                     const content = generateTypeDefinationJSON(readFile);
-                    typesDefinitionContent += `type ${nameTitle} = {\n${content}\n};\n\n`;
+                    typeFilesDefinitionContent += `export type ${nameTitle} = {\n${content}\n};\n\n`;
 
+                    fileNames.push(name);
                     nameTypes.push(nameTitle);
+
+                    const keyEnum = name.replaceAll('-', '_').replaceAll('.', '_').toUpperCase();
+                    nameEnums.push(`  ${keyEnum} = '${name.toLowerCase()}',`)
                 }
             }
         });
     }
 
     recursiveFileStructure(baseDir);
-    typesDefinitionContent = `export type JsonTypes = ${nameTypes.join(' | ')};\n\n${typesDefinitionContent}`;
 
-    writeFileSync(join(baseDir, `json-types.d.ts`), typesDefinitionContent, "utf-8");
+
+    // Presentation of the exported Type and Enum
+    let jsonTypes = `/**\n * Types and Enum to represent the JSON structures of the files\n */\n`;
+
+    // File exports
+    const types = fileNames.map(name => `'${name.toLowerCase()}'`);
+    jsonTypes += `export type JsonTypes = ${nameTypes.join(' | ')};`;
+    jsonTypes += `\n\nexport type JsonFilesType = ${types.join(' | ')};`;
+    jsonTypes += `\n\nexport enum JsonFilesEnum {\n${nameEnums.join('\n')}\n}`;
+
+
+    // Presentation of existing types
+    jsonTypes += `\n\n\n/**\n * Structures of each JSON file represented in a specific type\n${nameTypes.map(name => ` * @see ${name}`).join('\n')}\n */\n\n`;
+
+    // Type contents
+    jsonTypes += `${typeFilesDefinitionContent}`;
+
+
+    // Saves the new JsonTypes file
+    writeFileSync(join(baseDir, `json-types.d.ts`), jsonTypes, "utf-8");
 }

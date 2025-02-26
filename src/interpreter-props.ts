@@ -1,8 +1,7 @@
 import { Logger } from "../helper/logger";
-import { FileLoader } from "./files/file-loader";
 import { Config } from "./interfaces/config.interface";
-import { FileStructureType } from "./files/file-structure";
-import { generateJsonTypes } from "./files/generate-json-types";
+import { generateTypes } from "./files/generate-types";
+import { FileLoader, FileStructureType } from "./files/file-loader";
 
 export class InterpreterProps<T> {
     private logger: Logger;
@@ -21,6 +20,9 @@ export class InterpreterProps<T> {
             basePath: path,
             defaultLanguage = 'en',
         } = this.config;
+
+        // Generate a JSON Types
+        generateTypes(path);
 
         // Sets the default language if not provided
         this._language = defaultLanguage;

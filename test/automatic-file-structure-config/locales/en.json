@@ -1,12 +1,5 @@
 {
-    "SUCCESS": {
-        "RESOURCE": {
-            "FOUND": "{{resource}} found successfully",
-            "CREATED": "{{resource}} created successfully",
-            "DELETED": "{{resource}} deleted successfully",
-            "UPDATED": "{{resource}} updated successfully"
-        }
-    },
+    "BACANA": "SHOWWWW",
     "ERRORS": {
         "MODULES": {
             "APPOINTMENTS": {
@@ -14,14 +7,6 @@
                     "OVER_LAPPING": "Another appointment overlaps this appointment dates"
                 }
             }
-        },
-        "COMMON": {
-            "NOT_FOUND": "Resource not found",
-            "BAD_REQUEST": "Request execution failed",
-            "CONFLICT": "Resource processing conflict",
-            "ALREADY_EXISTS": "Resource already exists",
-            "INTERNAL_SERVER_ERROR": "Internal server error",
-            "INVALID_TRANSLATE_CODE": "Invalid translation code"
         },
         "VALIDATION": {
             "REQUIRED": "The {{field}} field is required",
