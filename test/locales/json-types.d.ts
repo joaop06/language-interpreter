@@ -3,8 +3,7 @@
  */
 export type JsonTypes = A | B | En | Es | Pt_Br;
 
-export type JsonFilesType = 'a' | 'b' | 'en' | 'es' | 'pt-br';
-
+export type JsonFilesType = "a" | "b" | "en" | "es" | "pt-br";
 
 /**
  * Structures of each JSON file represented in a specific type
@@ -241,4 +240,3 @@ export type Pt_Br = {
     GOODBYE: string;
   };
 };
-
