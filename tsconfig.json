@@ -1,4 +1,11 @@
 {
+  "exclude": [
+    "test",
+    "dist",
+    "**/*spec.ts",
+    "node_modules",
+    "vite.config.ts",
+  ],
   "compilerOptions": {
     "types": [
       "node"
@@ -6,17 +13,19 @@
     "strict": true, /* Enable all strict type-checking options. */
     "baseUrl": "./", /* Specify the base directory to resolve non-relative module names. */
     "sourceMap": true, /* Create source map files for emitted JavaScript files. */
-    "outDir": "./dist", /* Specify an output folder for all emitted files. */
+    "module": "ESNext", /* Specify what module code is generated. */
     "target": "ES2024", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "declaration": true, /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
     "incremental": true, /* Save .tsbuildinfo files to allow for incremental compilation of projects. */
-    "module": "commonJS", /* Specify what module code is generated. */
+    "outDir": "dist/esm", /* Specify an output folder for all emitted files. */
     "skipLibCheck": true, /* Skip type checking all .d.ts files. */
+    "declarationMap": true, /* Create sourcemaps for d.ts files. */
     "noImplicitAny": false, /* Enable error reporting for expressions and declarations with an implied 'any' type. */
     "removeComments": true, /* Disable emitting comments. */
     "esModuleInterop": true, /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
     "strictNullChecks": false, /* When type checking, take into account 'null' and 'undefined'. */
     "maxNodeModuleJsDepth": 10, /* Specify the maximum folder depth used for checking JavaScript files from 'node_modules'. Only applicable with 'allowJs'. */
+    "moduleResolution": "node", /* Specify how TypeScript looks up a file from a given module specifier. */
     "strictBindCallApply": false, /* Check that the arguments for 'bind', 'call', and 'apply' methods match the original function. */
     "noFallthroughCasesInSwitch": false, /* Enable error reporting for fallthrough cases in switch statements. */
     "allowSyntheticDefaultImports": true, /* Allow 'import x from y' when a module doesn't have a default export. */
@@ -42,7 +51,6 @@
     // "moduleDetection": "auto",                        /* Control what method is used to detect module-format JS files. */
     /* Modules */
     // "rootDir": "./",                                  /* Specify the root folder within your source files. */
-    // "moduleResolution": "node10",                     /* Specify how TypeScript looks up a file from a given module specifier. */
     // "paths": {},                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like './node_modules/@types'. */
@@ -61,7 +69,6 @@
     // "allowJs": true,                                  /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */
     // "checkJs": true,                                  /* Enable error reporting in type-checked JavaScript files. */
     /* Emit */
-    // "declarationMap": true,                           /* Create sourcemaps for d.ts files. */
     // "emitDeclarationOnly": true,                      /* Only output d.ts files and not JavaScript files. */
     // "inlineSourceMap": true,                          /* Include sourcemap files inside the emitted JavaScript. */
     // "noEmit": true,                                   /* Disable emitting files from a compilation. */
