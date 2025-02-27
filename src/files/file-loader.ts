@@ -142,7 +142,7 @@ export class FileLoader<T extends FileStructureType> {
 
             // Convert the JSON structure in type
             const content = generateTypeDefinationJSON(readFile);
-            typeFilesDefinitionContent += `export type ${nameTitle} = {\n${content}\n};\n\n`;
+            typeFilesDefinitionContent += `export type ${nameTitle} = {\n${content}\n};\n`;
 
             fileNames.push(name);
             nameTypes.push(nameTitle);
@@ -157,12 +157,12 @@ export class FileLoader<T extends FileStructureType> {
     let jsonTypes = `/**\n * Types to represent the JSON structures of the files\n */\n`;
 
     // File exports
-    const types = fileNames.map((name) => `'${name.toLowerCase()}'`);
+    const types = fileNames.map((name) => `"${name.toLowerCase()}"`);
     jsonTypes += `export type JsonTypes = ${nameTypes.join(" | ")};`;
     jsonTypes += `\n\nexport type JsonFilesType = ${types.join(" | ")};`;
 
     // Presentation of existing types
-    jsonTypes += `\n\n\n/**\n * Structures of each JSON file represented in a specific type\n${nameTypes.map((name) => ` * @see ${name}`).join("\n")}\n */\n\n`;
+    jsonTypes += `\n\n/**\n * Structures of each JSON file represented in a specific type\n${nameTypes.map((name) => ` * @see ${name}`).join("\n")}\n */\n\n`;
 
     // Type contents
     jsonTypes += `${typeFilesDefinitionContent}`;

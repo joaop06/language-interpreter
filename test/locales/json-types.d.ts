@@ -24,14 +24,12 @@ export type A = {
     INVALID_TRANSLATE_CODE: string;
   };
 };
-
 export type B = {
   KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK: string;
   CREATED: string;
   DELETED: string;
   UPDATED: string;
 };
-
 export type En = {
   BACANA: string;
   ERRORS: {
@@ -96,7 +94,6 @@ export type En = {
     GOODBYE: string;
   };
 };
-
 export type Es = {
   ERRORS: {
     MODULES: {
@@ -160,7 +157,6 @@ export type Es = {
     GOODBYE: string;
   };
 };
-
 export type Pt_Br = {
   SUCCESS: {
     RESOURCE: {
