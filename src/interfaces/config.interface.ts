@@ -1,9 +1,20 @@
-import { LogConfig } from "./log-config.interface";
-import { FileStructureConfig } from "./file-structure-config.interface";
 
-export type Config = FileStructureConfig & LogConfig;
+export type Config = BaseConfig & (DebugLogConfig | OtherLogConfig);
 
-export interface BaseConfig {
+interface BaseConfig {
     basePath: string;
     defaultLanguage?: string;
+}
+
+interface OtherLogConfig extends BaseConfig {
+    logLevel?: 'info' | 'error';
+    logConfig?: never; // Impede `logConfig` se o nível não for 'debug'
+}
+
+interface DebugLogConfig extends BaseConfig {
+    logLevel: 'debug';
+    logConfig: {
+        logPath: string;
+        logRetentionDays: number;
+    };
 }

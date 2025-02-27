@@ -1,4 +1,3 @@
-export * from "./files/generate-types";
 import { Exception } from "../helper/exception";
 import { Config } from "./interfaces/config.interface";
 import { InterpreterProps } from "./interpreter-props";
@@ -18,7 +17,7 @@ export class Interpreter<T> extends InterpreterProps<T> {
     }
 
     translate(code: InterpreterCodeKeys<T>, options: any = {}): string | null {
-        if (!code) new Exception('The code from message is missing');
+        if (!code) throw new Exception('The code from message is missing');
 
         const { lang, args } = options;
         if (!!lang && this.language !== lang) this.language = lang;
@@ -32,7 +31,7 @@ export class Interpreter<T> extends InterpreterProps<T> {
                 currPath = currPath[key];
 
             } else {
-                new Exception(`Key not found: ${code}`);
+                throw new Exception(`Key not found: ${code}`);
             }
         }
 
@@ -40,11 +39,11 @@ export class Interpreter<T> extends InterpreterProps<T> {
         let message: string = currPath;
 
         if (typeof message !== 'string') {
-            new Exception(`Message path is not a string: ${code}`);
+            throw new Exception(`Message path is not a string: ${code}`);
         }
 
         if (message.includes('{{') && message.includes('}}') && !args) {
-            new Exception(`Arguments are needed for the desired message: ${code}`);
+            throw new Exception(`Arguments are needed for the desired message: ${code}`);
         }
 
         // Realiza a substituição dos placeholders (ex: {{field}})

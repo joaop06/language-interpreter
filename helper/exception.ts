@@ -1,10 +1,19 @@
 import { Logger } from "../helper/logger";
 
 export class Exception extends Error {
-    constructor(message: string, cause?: string) {
-        const logger = new Logger();
+    cause?: string;
 
-        logger.error(message);
-        throw super(message, { cause });
+    constructor(message: string, cause?: string) {
+        super(message);
+        this.cause = cause;
+        this.name = 'Exception';
+
+        // Preserva o stack trace corretamente
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(this, this.constructor);
+        }
+
+        // Registra erro no Logger com mais informações
+        new Logger().error(`${this.name}: ${message}${cause ? ` | Cause: ${cause}` : ''}`);
     }
 }

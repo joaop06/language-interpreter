@@ -9,6 +9,7 @@
   "scripts": {
     "test": "vitest",
     "clean:build": "rimraf dist",
+    "coverage": "vitest --coverage",
     "build": "npm run clean:build && tsc -p tsconfig.build.json",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix && prettier --write \"src/**/*.ts\""
   },
@@ -20,6 +21,7 @@
     "@types/node": "^22.13.4",
     "@typescript-eslint/eslint-plugin": "^8.24.0",
     "@typescript-eslint/parser": "^8.24.0",
+    "@vitest/coverage-v8": "^3.0.5",
     "eslint": "^9.20.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",

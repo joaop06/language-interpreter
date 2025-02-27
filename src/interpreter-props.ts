@@ -1,6 +1,5 @@
 import { Logger } from "../helper/logger";
 import { Config } from "./interfaces/config.interface";
-import { generateTypes } from "./files/generate-types";
 import { FileLoader, FileStructureType } from "./files/file-loader";
 
 export class InterpreterProps<T> {
@@ -22,7 +21,7 @@ export class InterpreterProps<T> {
         } = this.config;
 
         // Generate a JSON Types
-        generateTypes(path);
+        FileLoader.generateTypes(path);
 
         // Sets the default language if not provided
         this._language = defaultLanguage;
@@ -32,16 +31,10 @@ export class InterpreterProps<T> {
         this.structure = this.fileLoader.structure;
 
         this.logger = new Logger('InterpreterProps');
-        this.defineLanguages();
     }
 
     get languages(): string { return this._languages; }
 
     get language(): string { return this._language; }
     set language(lang: typeof this._languages) { this._language = lang; }
-
-
-    defineLanguages() {
-        // console.log(this.structure);
-    }
 }

@@ -1,17 +1,9 @@
 /**
- * Types and Enum to represent the JSON structures of the files
+ * Types to represent the JSON structures of the files
  */
 export type JsonTypes = A | B | En | Es | Pt_Br;
 
 export type JsonFilesType = 'a' | 'b' | 'en' | 'es' | 'pt-br';
-
-export enum JsonFilesEnum {
-  A = 'a',
-  B = 'b',
-  EN = 'en',
-  ES = 'es',
-  PT_BR = 'pt-br',
-}
 
 
 /**
