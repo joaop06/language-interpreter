@@ -8,8 +8,8 @@
   "types": "dist/esm/src/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
+      "import": "./dist/esm/src/index.js",
+      "require": "./dist/cjs/src/index.js"
     }
   },
   "homepage": "https://github.com/joaop06/interpreter#readme",
