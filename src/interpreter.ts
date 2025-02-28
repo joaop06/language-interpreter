@@ -3,7 +3,7 @@ import { Config } from "./interfaces/config.interface";
 import { InterpreterProps } from "./interpreter-props";
 import { InterpreterCodeKeys } from "./types/interpreter-code-keys.type";
 
-export class Interpreter<T> extends InterpreterProps {
+export class Interpreter<T = string> extends InterpreterProps {
   constructor(config: Config) {
     super(config);
   }

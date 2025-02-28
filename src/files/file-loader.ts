@@ -171,7 +171,7 @@ export class FileLoader<T extends FileStructureType> {
 
     // Saves the new JsonTypes file
     writeFileSync(
-      join(__dirname, "../", "types", "json-types.ts"),
+      join(baseDir, "json-structures.type.d.ts"),
       jsonTypes,
       "utf-8",
     );

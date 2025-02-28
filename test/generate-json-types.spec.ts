@@ -1,21 +1,14 @@
 import { join } from "path";
 import { FileLoader } from "../src/files/file-loader";
 import { it, expect, describe, afterEach, beforeEach } from "vitest";
-import {
-  existsSync,
-  mkdirSync,
-  readdirSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from "fs";
+import { rmSync, mkdirSync, existsSync, readFileSync, writeFileSync } from "fs";
 
 describe("generateTypes", () => {
   const testDir = join(__dirname, "test-locales");
-  const typesDir = join(__dirname, "../", "src", "types");
 
   let timeSleep = 10;
-  const sleep = async () => await new Promise(resolve => setTimeout(resolve, timeSleep += 10));
+  const sleep = async () =>
+    await new Promise((resolve) => setTimeout(resolve, (timeSleep += 10)));
 
   beforeEach(() => {
     // Cria um diretório de teste antes de cada teste
@@ -43,7 +36,7 @@ describe("generateTypes", () => {
     FileLoader.generateTypes(testDir);
 
     // Verifica se o arquivo de tipos foi criado
-    const typeFilePath = join(typesDir, "json-types.ts");
+    const typeFilePath = join(testDir, "json-structures.type.d.ts");
     expect(existsSync(typeFilePath)).toBe(true);
 
     // Verifica o conteúdo do arquivo de tipos
@@ -67,7 +60,7 @@ describe("generateTypes", () => {
     FileLoader.generateTypes(testDir);
 
     // Verifica se o arquivo de tipos foi criado e contém os tipos corretos
-    const typeFilePath = join(typesDir, "json-types.ts");
+    const typeFilePath = join(testDir, "json-structures.type.d.ts");
     expect(existsSync(typeFilePath)).toBe(true);
 
     const typeFileContent = readFileSync(typeFilePath, "utf-8");
@@ -94,7 +87,7 @@ describe("generateTypes", () => {
     FileLoader.generateTypes(testDir);
 
     // Verifica se o arquivo de tipos foi criado, mesmo que o diretório esteja vazio
-    const typeFilePath = join(typesDir, "json-types.ts");
+    const typeFilePath = join(testDir, "json-structures.type.d.ts");
     expect(existsSync(typeFilePath)).toBe(true);
 
     // Verifica se o arquivo de tipos está vazio (apenas com a estrutura básica)

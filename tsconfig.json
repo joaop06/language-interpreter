@@ -6,7 +6,7 @@
     "strict": true, /* Enable all strict type-checking options. */
     "baseUrl": "./", /* Specify the base directory to resolve non-relative module names. */
     "sourceMap": true, /* Create source map files for emitted JavaScript files. */
-    "module": "ESNext", /* Specify what module code is generated. */
+    "module": "ES2022", /* Specify what module code is generated. */
     "target": "ES2024", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "declaration": true, /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
     "incremental": true, /* Save .tsbuildinfo files to allow for incremental compilation of projects. */
