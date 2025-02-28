@@ -18,12 +18,11 @@
     "test": "vitest",
     "clean:build": "rimraf dist",
     "coverage": "vitest --coverage",
-    "build": "npm run clean:build && tsc && tsc --project tsconfig.cjs.json",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix && prettier --write \"src/**/*.ts\""
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix && prettier --write \"src/**/*.ts\"",
+    "build": "npm run clean:build && tsc -p tsconfig.build.json && tsc --project tsconfig.cjs.json"
   },
   "dependencies": {
-    "rimraf": "^6.0.1",
-    "vitest": "^3.0.5"
+    "rimraf": "^6.0.1"
   },
   "devDependencies": {
     "@types/node": "^22.13.4",
@@ -33,7 +32,8 @@
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.7"
   },
   "repository": {
     "type": "git",

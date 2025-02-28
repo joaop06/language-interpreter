@@ -1,11 +1,4 @@
 {
-  "exclude": [
-    "test",
-    "dist",
-    "**/*spec.ts",
-    "node_modules",
-    "vite.config.ts",
-  ],
   "compilerOptions": {
     "types": [
       "node"

@@ -12,6 +12,10 @@ import {
 
 describe("generateTypes", () => {
   const testDir = join(__dirname, "test-locales");
+  const typesDir = join(__dirname, "../", "src", "types");
+
+  let timeSleep = 10;
+  const sleep = async () => await new Promise(resolve => setTimeout(resolve, timeSleep += 10));
 
   beforeEach(() => {
     // Cria um diretório de teste antes de cada teste
@@ -23,27 +27,9 @@ describe("generateTypes", () => {
     rmSync(testDir, { recursive: true, force: true });
   });
 
-  it("must create the types based on the JSON files", () => {
-    const dir = __dirname + "/locales";
+  it("must create the types based on the JSON files", async () => {
+    await sleep();
 
-    FileLoader.generateTypes(dir);
-
-    const recursiveFiles = (dir: string): void => {
-      readdirSync(dir, { withFileTypes: true }).forEach((entry) => {
-        const entryPath = join(dir, entry.name);
-        const isDirectory = entry.isDirectory();
-
-        if (isDirectory || entry.name.endsWith(".d.ts")) {
-          if (isDirectory) recursiveFiles(entryPath);
-          else expect(existsSync(entryPath)).toBe(true);
-        }
-      });
-    };
-
-    recursiveFiles(dir);
-  });
-
-  it("must create the types based on the JSON files", () => {
     // Cria alguns arquivos JSON no diretório de teste
     writeFileSync(
       join(testDir, "example1.json"),
@@ -57,7 +43,7 @@ describe("generateTypes", () => {
     FileLoader.generateTypes(testDir);
 
     // Verifica se o arquivo de tipos foi criado
-    const typeFilePath = join(testDir, "json-types.d.ts");
+    const typeFilePath = join(typesDir, "json-types.ts");
     expect(existsSync(typeFilePath)).toBe(true);
 
     // Verifica o conteúdo do arquivo de tipos
@@ -68,17 +54,25 @@ describe("generateTypes", () => {
     expect(typeFileContent).toContain("nested: {");
   });
 
-  it("must handle empty directories correctly", () => {
+  it("must handle directories with subdirectories correctly", async () => {
+    await sleep();
+
+    // Cria uma estrutura de diretórios com subdiretórios e arquivos JSON
+    mkdirSync(join(testDir, "subdir"));
+    writeFileSync(
+      join(testDir, "subdir", "example3.json"),
+      JSON.stringify({ key3: "value3" }),
+    );
+
     FileLoader.generateTypes(testDir);
 
-    // Verifica se o arquivo de tipos foi criado, mesmo que o diretório esteja vazio
-    const typeFilePath = join(testDir, "json-types.d.ts");
+    // Verifica se o arquivo de tipos foi criado e contém os tipos corretos
+    const typeFilePath = join(typesDir, "json-types.ts");
     expect(existsSync(typeFilePath)).toBe(true);
 
-    // Verifica se o arquivo de tipos está vazio (apenas com a estrutura básica)
     const typeFileContent = readFileSync(typeFilePath, "utf-8");
-    expect(typeFileContent).toContain("export type JsonTypes = ;");
-    expect(typeFileContent).toContain("export type JsonFilesType = ;");
+    expect(typeFileContent).toContain("export type Example3 = {");
+    expect(typeFileContent).toContain("key3: string;");
   });
 
   it("must throw an exception when the directory does not exist", () => {
@@ -94,22 +88,18 @@ describe("generateTypes", () => {
     expect(() => FileLoader.generateTypes(testDir)).toThrow();
   });
 
-  it("must handle directories with subdirectories correctly", () => {
-    // Cria uma estrutura de diretórios com subdiretórios e arquivos JSON
-    mkdirSync(join(testDir, "subdir"));
-    writeFileSync(
-      join(testDir, "subdir", "example3.json"),
-      JSON.stringify({ key3: "value3" }),
-    );
+  it("must handle empty directories correctly", async () => {
+    await sleep();
 
     FileLoader.generateTypes(testDir);
 
-    // Verifica se o arquivo de tipos foi criado e contém os tipos corretos
-    const typeFilePath = join(testDir, "json-types.d.ts");
+    // Verifica se o arquivo de tipos foi criado, mesmo que o diretório esteja vazio
+    const typeFilePath = join(typesDir, "json-types.ts");
     expect(existsSync(typeFilePath)).toBe(true);
 
+    // Verifica se o arquivo de tipos está vazio (apenas com a estrutura básica)
     const typeFileContent = readFileSync(typeFilePath, "utf-8");
-    expect(typeFileContent).toContain("export type Example3 = {");
-    expect(typeFileContent).toContain("key3: string;");
+    expect(typeFileContent).toContain("export type JsonTypes = any;");
+    expect(typeFileContent).toContain("export type JsonFilesType = any;");
   });
 });

@@ -158,16 +158,22 @@ export class FileLoader<T extends FileStructureType> {
 
     // File exports
     const types = fileNames.map((name) => `"${name.toLowerCase()}"`);
-    jsonTypes += `export type JsonTypes = ${nameTypes.join(" | ")};`;
-    jsonTypes += `\n\nexport type JsonFilesType = ${types.join(" | ")};`;
+    jsonTypes += `export type JsonTypes = ${nameTypes.join(" | ") || "any"};`;
+    jsonTypes += `\n\nexport type JsonFilesType = ${types.join(" | ") || "any"};`;
 
     // Presentation of existing types
-    jsonTypes += `\n\n/**\n * Structures of each JSON file represented in a specific type\n${nameTypes.map((name) => ` * @see ${name}`).join("\n")}\n */\n\n`;
+    jsonTypes += `\n\n/**\n * Structures of each JSON file represented in a specific type\n${nameTypes.map((name) => ` * @see ${name}`).join("\n") || " *"}\n */`;
 
     // Type contents
-    jsonTypes += `${typeFilesDefinitionContent}`;
+    jsonTypes += !!typeFilesDefinitionContent
+      ? `\n\n${typeFilesDefinitionContent}`
+      : "\n";
 
     // Saves the new JsonTypes file
-    writeFileSync(join(baseDir, `json-types.d.ts`), jsonTypes, "utf-8");
+    writeFileSync(
+      join(__dirname, "../", "types", "json-types.ts"),
+      jsonTypes,
+      "utf-8",
+    );
   }
 }

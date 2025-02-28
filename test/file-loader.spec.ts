@@ -36,12 +36,6 @@ describe("FileLoader", () => {
     expect(() => fileLoader.readFile("invalid-file")).toThrow();
   });
 
-  it.skip("should read a nested JSON file successfully", () => {
-    const fileLoader = FileLoader.init(locales);
-    const file = fileLoader.readFile("subdir.nested");
-    expect(file).toBeDefined();
-  });
-
   it("should return null when trying to resolve an invalid path", () => {
     const fileLoader = FileLoader.init(locales);
     expect(
