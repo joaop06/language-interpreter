@@ -1,5 +1,5 @@
 import { join } from "path";
-import { FileLoader } from "../src/files/file-loader";
+import { FileLoader } from "../../src/files/file-loader";
 import { it, expect, describe, afterEach, beforeEach } from "vitest";
 import { rmSync, mkdirSync, existsSync, readFileSync, writeFileSync } from "fs";
 

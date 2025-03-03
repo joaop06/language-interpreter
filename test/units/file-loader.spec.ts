@@ -1,5 +1,5 @@
 import * as path from "path";
-import { FileLoader } from "../src/files/file-loader";
+import { FileLoader } from "../../src/files/file-loader";
 import { describe, expect, it, vi, afterEach } from "vitest";
 
 describe("FileLoader", () => {

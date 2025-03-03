@@ -18,6 +18,7 @@
     "test": "vitest",
     "clean:build": "rimraf dist",
     "coverage": "vitest --coverage",
+    "test-w": "nodemon --watch .env --exec \"vitest\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix && prettier --write \"src/**/*.ts\"",
     "build": "npm run clean:build && tsc -p tsconfig.build.json && tsc --project tsconfig.cjs.json"
   },
@@ -29,11 +30,13 @@
     "@typescript-eslint/eslint-plugin": "^8.24.0",
     "@typescript-eslint/parser": "^8.24.0",
     "@vitest/coverage-v8": "^3.0.5",
+    "dotenv": "^16.4.7",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
+    "nodemon": "^3.1.9",
     "typescript": "^5.7.3",
-    "vitest": "^3.0.7"
+    "vitest": "^3.0.5"
   },
   "repository": {
     "type": "git",
@@ -49,5 +52,9 @@
   ],
   "bugs": {
     "url": "https://github.com/joaop06/interpreter/issues"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "type": "commonjs"
 }

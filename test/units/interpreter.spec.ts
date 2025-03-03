@@ -1,6 +1,6 @@
-import { Interpreter } from "../src/interpreter";
+import { Interpreter } from "../../src/interpreter";
 import { it, expect, describe, beforeAll } from "vitest";
-import { Config } from "../src/interfaces/config.interface";
+import { Config } from "../../src/interfaces/config.interface";
 import { JsonFilesType } from "./locales/json-structures.type";
 
 describe("Interpreter instance", () => {
