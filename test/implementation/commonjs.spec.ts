@@ -104,7 +104,10 @@ describe.skipIf(skipImplementationTests)('CommonJs Implementation', () => {
     });
 
     it('should be able translate a example key', () => {
-        const { exec, tempDir } = generateEnv({ module: 'cjs' });
+        const { exec, tempDir } = generateEnv(
+            { module: 'cjs' },
+            { execPath: 'index.ts' },
+        );
 
         // Diretório temporário para os arquivos de traduções
         const localesDir = join(tempDir, 'locales');

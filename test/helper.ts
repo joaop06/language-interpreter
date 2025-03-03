@@ -73,9 +73,6 @@ export const generateEnv = (
         );
     }
 
-
-
-
     return {
         tempDir,
         tarballPath,
