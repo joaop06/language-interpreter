@@ -1,6 +1,6 @@
 import * as path from "path";
-import { FileLoader } from "../../src/files/file-loader";
 import { describe, expect, it, vi, afterEach } from "vitest";
+import { FileLoader } from "../../../../src/files/file-loader";
 
 describe("FileLoader", () => {
   const locales = path.resolve(__dirname, "locales");

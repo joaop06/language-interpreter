@@ -1,7 +1,10 @@
 import { Interpreter } from 'interpreter';
-import { JsonTypes } from 'locales/json-structures.type';
 
-const interpreter = new Interpreter<JsonTypes>({
-    defaultLanguage: 'en',
+const interpreter = new Interpreter({
+    defaultLanguage: 'example',
     basePath: __dirname + '/locales',
 });
+console.log(interpreter.translate('key'));
+
+interpreter.language = 'example2';
+console.log(interpreter.translate('key'));

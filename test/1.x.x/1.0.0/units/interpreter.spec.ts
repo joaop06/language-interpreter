@@ -1,7 +1,7 @@
-import { Interpreter } from "../../src/interpreter";
 import { it, expect, describe, beforeAll } from "vitest";
-import { Config } from "../../src/interfaces/config.interface";
+import { Interpreter } from "../../../../src/interpreter";
 import { JsonFilesType } from "./locales/json-structures.type";
+import { Config } from "../../../../src/interfaces/config.interface";
 
 describe("Interpreter instance", () => {
   let config: Config;
