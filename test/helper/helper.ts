@@ -6,7 +6,6 @@ import { mkdirSync, mkdtempSync, rmdirSync, writeFileSync } from 'fs';
 var folderNumber = 0;
 const versionsPath = resolve(join(__dirname, '../../versions'));
 
-type IOType = "overlapped" | "pipe" | "ignore" | "inherit";
 interface GenerateEnvInterface {
     /** EnvironmentOptions */
     libVersion?: string,
@@ -14,7 +13,6 @@ interface GenerateEnvInterface {
 
     /** ExecuteOptions */
     returnString?: boolean,
-    stdio?: IOType | Array<IOType | undefined> | undefined,
 }
 
 /**
@@ -26,7 +24,6 @@ interface GenerateEnvInterface {
  * @returns 
  */
 export const generateEnv = ({
-    stdio,
     module,
     returnString = false,
     libVersion = 'interpreter-1.0.0.tgz',
@@ -67,9 +64,9 @@ export const generateEnv = ({
     return {
         tempDir,
         tarballPath,
-        createTestFile: createTestFile(tempDir),
+        createFile: createFile(tempDir),
         createLocaleFiles: createLocaleFiles(tempDir),
-        exec: generateExecuteFunction({ module, tempDir, stdio, returnString }),
+        exec: exec({ module, tempDir, returnString }),
     };
 };
 
@@ -88,7 +85,7 @@ const createLocaleFiles = (tempDir: string) => {
     }
 }
 
-const createTestFile = (tempDir: string) => {
+const createFile = (tempDir: string) => {
     return (content: string) => {
         const testFilePath = join(tempDir, 'index.ts');
         writeFileSync(testFilePath, content);
@@ -96,20 +93,18 @@ const createTestFile = (tempDir: string) => {
     };
 };
 
-const generateExecuteFunction = ({
+const exec = ({
     module,
     tempDir,
 
     /** ExecuteOptions */
-    stdio,
     returnString,
 }: { tempDir: string } & Partial<GenerateEnvInterface>) => {
 
     return (removeTempDir: boolean = true): string | Buffer<ArrayBufferLike> => {
-        const options = { cwd: tempDir, stdio };
         const filePathToExecute = join(tempDir, module === 'cjs' ? 'index.ts' : 'index.js');
 
-        const result = execSync(`npx ts-node "${filePathToExecute}"`, options);
+        const result = execSync(`npx ts-node "${filePathToExecute}"`, { cwd: tempDir, stdio: ['pipe', 'pipe', 'pipe'] });
 
         if (removeTempDir) rmdirSync(tempDir, { recursive: true });
 

@@ -4,13 +4,12 @@ import { generateEnv } from '../../../helper/helper';
 describe.concurrent('CommonJs Implementation', () => {
 
     it('no such locales directory', () => {
-        const { exec, createLocaleFiles, createTestFile } = generateEnv({
+        const { exec, createFile } = generateEnv({
             module: 'cjs',
             returnString: true,
-            stdio: ['pipe', 'pipe', 'pipe']
         });
 
-        createTestFile(
+        createFile(
             `import { Interpreter } from 'interpreter';
             const interpreter = new Interpreter({
                 defaultLanguage: 'example',
@@ -18,20 +17,18 @@ describe.concurrent('CommonJs Implementation', () => {
             });`
         );
 
-        const localesDir = createLocaleFiles();
-
         try {
             exec(false);
         } catch (e: any) {
             const error = e.stderr.toString();
-            expect(error).toContain(`Error: ENOENT: no such file or directory, scandir '${localesDir}'`);
+            expect(error).toContain(`ENOENT: no such file or directory, scandir './locales'`);
         } finally {
-            expect(exec).toThrow();
+            expect(() => exec()).toThrow();
         }
     });
 
     it('should be able create a new instance of the Interpreter without locale files', () => {
-        const { exec, createLocaleFiles, createTestFile } = generateEnv({
+        const { exec, createLocaleFiles, createFile } = generateEnv({
             module: 'cjs',
             returnString: true
         });
@@ -43,7 +40,7 @@ describe.concurrent('CommonJs Implementation', () => {
          * Cria o arquivo index no diretório temporário
          * com o código para o teste da implementação
          */
-        createTestFile(
+        createFile(
             `import { Interpreter } from 'interpreter';
 
             const interpreter = new Interpreter({
@@ -56,10 +53,9 @@ describe.concurrent('CommonJs Implementation', () => {
     });
 
     it('should return an error when trying to translate a key not found', () => {
-        const { exec, createLocaleFiles, createTestFile } = generateEnv({
+        const { exec, createLocaleFiles, createFile } = generateEnv({
             module: 'cjs',
             returnString: true,
-            stdio: ['pipe', 'pipe', 'pipe']
         });
 
         // Diretório temporário para os arquivos de traduções
@@ -71,7 +67,7 @@ describe.concurrent('CommonJs Implementation', () => {
          * Cria o arquivo index no diretório temporário
          * com o código para o teste da implementação
          */
-        createTestFile(
+        createFile(
             `import { Interpreter } from 'interpreter';
 
             const interpreter = new Interpreter({
@@ -92,7 +88,7 @@ describe.concurrent('CommonJs Implementation', () => {
     });
 
     it('should be able translate a example key', () => {
-        const { exec, createLocaleFiles, createTestFile } = generateEnv({
+        const { exec, createLocaleFiles, createFile } = generateEnv({
             module: 'cjs',
             returnString: true
         });
@@ -106,7 +102,7 @@ describe.concurrent('CommonJs Implementation', () => {
          * Cria o arquivo index no diretório temporário
          * com o código para o teste da implementação
          */
-        createTestFile(
+        createFile(
             `import { Interpreter } from 'interpreter';
 
             const interpreter = new Interpreter({
@@ -122,7 +118,7 @@ describe.concurrent('CommonJs Implementation', () => {
     });
 
     it('should be able set a new default language', () => {
-        const { exec, createLocaleFiles, createTestFile } = generateEnv({
+        const { exec, createLocaleFiles, createFile } = generateEnv({
             module: 'cjs',
             returnString: true
         });
@@ -137,7 +133,7 @@ describe.concurrent('CommonJs Implementation', () => {
          * Cria o arquivo index no diretório temporário
          * com o código para o teste da implementação
          */
-        createTestFile(
+        createFile(
             `import { Interpreter } from 'interpreter';
 
             const interpreter = new Interpreter({
@@ -155,7 +151,7 @@ describe.concurrent('CommonJs Implementation', () => {
     });
 
     it('should return an error when set a new language and trying translate a key not found', () => {
-        const { exec, createLocaleFiles, createTestFile } = generateEnv({
+        const { exec, createLocaleFiles, createFile } = generateEnv({
             module: 'cjs',
             returnString: true
         });
@@ -170,7 +166,7 @@ describe.concurrent('CommonJs Implementation', () => {
          * Cria o arquivo index no diretório temporário
          * com o código para o teste da implementação
          */
-        createTestFile(
+        createFile(
             `import { Interpreter } from 'interpreter';
 
             const interpreter = new Interpreter({
@@ -194,7 +190,7 @@ describe.concurrent('CommonJs Implementation', () => {
     });
 
     it('should return an error when set a new language and trying translate a old key', () => {
-        const { exec, createLocaleFiles, createTestFile } = generateEnv({
+        const { exec, createLocaleFiles, createFile } = generateEnv({
             module: 'cjs',
             returnString: true
         });
@@ -209,7 +205,7 @@ describe.concurrent('CommonJs Implementation', () => {
          * Cria o arquivo index no diretório temporário
          * com o código para o teste da implementação
          */
-        createTestFile(
+        createFile(
             `import { Interpreter } from 'interpreter';
 
             const interpreter = new Interpreter({
@@ -233,7 +229,7 @@ describe.concurrent('CommonJs Implementation', () => {
     });
 
     it('it should be possible to implement the library and then type based on the generated JsonTypes file', () => {
-        const { exec, createLocaleFiles, createTestFile } = generateEnv({
+        const { exec, createLocaleFiles, createFile } = generateEnv({
             module: 'cjs',
             returnString: true
         });
@@ -247,7 +243,7 @@ describe.concurrent('CommonJs Implementation', () => {
          * Cria o arquivo index no diretório temporário
          * com o código para o teste da implementação
          */
-        createTestFile(
+        createFile(
             `import { Interpreter } from 'interpreter';
 
             const interpreter = new Interpreter({
@@ -260,7 +256,7 @@ describe.concurrent('CommonJs Implementation', () => {
         expect(() => exec(false)).not.toThrow();
 
         // Sobrescrever o arquivo index.ts com a nova importação
-        createTestFile(
+        createFile(
             `import { Interpreter } from 'interpreter';
             import { JsonTypes } from './locales/json-structures.type';
 
