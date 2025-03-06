@@ -2,6 +2,25 @@ import { it, expect, describe } from "vitest";
 import { generateEnv } from "../../../helper/helper";
 
 describe.concurrent("CommonJs Implementation", () => {
+  it('should load the CommonJs module using import', () => {
+    const { exec, createFile } = generateEnv(
+      {
+        module: 'cjs',
+        returnString: true,
+      },
+    );
+
+    // Cria o arquivo de teste
+    createFile(
+      `import { Interpreter } from 'interpreter';
+        console.log('Module loaded successfully');`
+    );
+
+    // Verifica se o módulo foi carregado sem erros
+    expect(() => exec(false)).not.toThrow();
+    expect(exec()).toBe('Module loaded successfully');
+  });
+
   it("no such locales directory", () => {
     const { exec, createFile } = generateEnv({
       module: "cjs",

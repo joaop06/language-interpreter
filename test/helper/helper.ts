@@ -64,7 +64,7 @@ export const generateEnv = ({
   return {
     tempDir,
     tarballPath,
-    createFile: createFile(tempDir),
+    createFile: createFile({ tempDir, module }),
     createLocaleFiles: createLocaleFiles(tempDir),
     exec: exec({ module, tempDir, returnString }),
   };
@@ -85,9 +85,12 @@ const createLocaleFiles = (tempDir: string) => {
   };
 };
 
-const createFile = (tempDir: string) => {
+const createFile = ({
+  module,
+  tempDir,
+}: { tempDir: string } & Partial<GenerateEnvInterface>) => {
   return (content: string) => {
-    const testFilePath = join(tempDir, "index.ts");
+    const testFilePath = join(tempDir, module === "cjs" ? "index.ts" : "index.js");
     writeFileSync(testFilePath, content);
     return testFilePath;
   };
@@ -101,15 +104,37 @@ const exec = ({
   returnString,
 }: { tempDir: string } & Partial<GenerateEnvInterface>) => {
   return (removeTempDir: boolean = true): string | Buffer<ArrayBufferLike> => {
+
+    let result;
+
     const filePathToExecute = join(
       tempDir,
       module === "cjs" ? "index.ts" : "index.js",
     );
 
-    const result = execSync(`npx ts-node "${filePathToExecute}"`, {
-      cwd: tempDir,
-      stdio: ["pipe", "pipe", "pipe"],
-    });
+
+    try {
+      if (module === 'cjs') {
+        result = execSync(`npx ts-node "${filePathToExecute}"`, {
+          cwd: tempDir,
+          stdio: ["pipe", "pipe", "pipe"],
+        });
+
+      } else if (module === 'esm') {
+        result = execSync(`node "${filePathToExecute}"`, {
+          cwd: tempDir,
+          stdio: ["pipe", "pipe", "pipe"],
+        });
+      }
+
+    } catch (e) {
+      /**
+       * Se não for para remover o diretório
+       * irá lançar o erro, pois posteriormente irá executar novamente removendo o diretório
+       */
+      if (!removeTempDir) throw e;
+    }
+
 
     if (removeTempDir) rmdirSync(tempDir, { recursive: true });
 
