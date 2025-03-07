@@ -1,9 +1,9 @@
-import * as path from "path";
+import { resolve } from "path";
 import { describe, expect, it, vi, afterEach } from "vitest";
 import { FileLoader } from "../../../../src/files/file-loader";
 
 describe("FileLoader", () => {
-  const locales = path.resolve(__dirname, "locales");
+  const locales = resolve(__dirname, "locales");
 
   afterEach(() => {
     vi.restoreAllMocks();

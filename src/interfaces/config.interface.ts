@@ -1,7 +1,7 @@
 export type Config = BaseConfig & (DebugLogConfig | OtherLogConfig);
 
 interface BaseConfig {
-  basePath: string;
+  localesPath: string;
   defaultLanguage?: string;
 }
 

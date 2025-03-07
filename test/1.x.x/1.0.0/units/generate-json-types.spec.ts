@@ -36,15 +36,27 @@ describe("generateTypes", () => {
     FileLoader.generateTypes(testDir);
 
     // Verifica se o arquivo de tipos foi criado
-    const typeFilePath = join(testDir, "json-structures.type.d.ts");
-    expect(existsSync(typeFilePath)).toBe(true);
+    const typeIndexFilePath = join(testDir, "types");
+    expect(existsSync(typeIndexFilePath)).toBe(true);
 
     // Verifica o conteúdo do arquivo de tipos
-    const typeFileContent = readFileSync(typeFilePath, "utf-8");
-    expect(typeFileContent).toContain("export type Example1 = {");
-    expect(typeFileContent).toContain("export type Example2 = {");
-    expect(typeFileContent).toContain("key1: string;");
-    expect(typeFileContent).toContain("nested: {");
+    /**
+     * Example file 1
+     */
+    const typeExample1FilePath = join(testDir, "types", "example1.d.ts");
+    const typeExample1FileContent = readFileSync(typeExample1FilePath, "utf-8");
+
+    expect(typeExample1FileContent).toContain("key1: string;");
+    expect(typeExample1FileContent).toContain("export default Example1;");
+
+    /**
+     * Example file 2
+     */
+    const typeExample2FilePath = join(testDir, "types", "example2.d.ts");
+    const typeExample2FileContent = readFileSync(typeExample2FilePath, "utf-8");
+
+    expect(typeExample2FileContent).toContain("nested: {");
+    expect(typeExample2FileContent).toContain("export default Example2;");
   });
 
   it("must handle directories with subdirectories correctly", async () => {
@@ -60,11 +72,13 @@ describe("generateTypes", () => {
     FileLoader.generateTypes(testDir);
 
     // Verifica se o arquivo de tipos foi criado e contém os tipos corretos
-    const typeFilePath = join(testDir, "json-structures.type.d.ts");
-    expect(existsSync(typeFilePath)).toBe(true);
+    const typeIndexFilePath = join(testDir, "types", "index.d.ts");
+    expect(existsSync(typeIndexFilePath)).toBe(true);
+
+    const typeFilePath = join(testDir, "types", "example3.d.ts");
 
     const typeFileContent = readFileSync(typeFilePath, "utf-8");
-    expect(typeFileContent).toContain("export type Example3 = {");
+    expect(typeFileContent).toContain("export default Example3;");
     expect(typeFileContent).toContain("key3: string;");
   });
 
@@ -87,11 +101,11 @@ describe("generateTypes", () => {
     FileLoader.generateTypes(testDir);
 
     // Verifica se o arquivo de tipos foi criado, mesmo que o diretório esteja vazio
-    const typeFilePath = join(testDir, "json-structures.type.d.ts");
-    expect(existsSync(typeFilePath)).toBe(true);
+    const typeIndexFilePath = join(testDir, "types", "index.d.ts");
+    expect(existsSync(typeIndexFilePath)).toBe(true);
 
     // Verifica se o arquivo de tipos está vazio (apenas com a estrutura básica)
-    const typeFileContent = readFileSync(typeFilePath, "utf-8");
+    const typeFileContent = readFileSync(typeIndexFilePath, "utf-8");
     expect(typeFileContent).toContain("export type JsonTypes = any;");
     expect(typeFileContent).toContain("export type JsonFilesType = any;");
   });

@@ -1,6 +1,6 @@
+import { Interpreter } from "../../../../src";
+import { JsonFilesType } from "./locales/types";
 import { it, expect, describe, beforeAll } from "vitest";
-import { Interpreter } from "../../../../src/interpreter";
-import { JsonFilesType } from "./locales/json-structures.type";
 import { Config } from "../../../../src/interfaces/config.interface";
 
 describe("Interpreter instance", () => {
@@ -8,7 +8,7 @@ describe("Interpreter instance", () => {
 
   beforeAll(() => {
     config = {
-      basePath: __dirname + "/locales",
+      localesPath: __dirname + "/locales",
     };
   });
 
@@ -19,15 +19,15 @@ describe("Interpreter instance", () => {
 
   it("should be define language property with default value", () => {
     const interpreter = new Interpreter(config);
-    expect(interpreter.language).toEqual<JsonFilesType>("en");
-    expect(interpreter.language).not.toEqual<JsonFilesType>("pt-br");
+    expect(interpreter.defaultLanguage).toEqual<JsonFilesType>("en");
+    expect(interpreter.defaultLanguage).not.toEqual<JsonFilesType>("pt-br");
   });
 
   it("should be set a different language", () => {
     const interpreter = new Interpreter(config);
 
-    interpreter.language = "es";
-    expect(interpreter.language).toEqual<JsonFilesType>("es");
-    expect(interpreter.language).not.toEqual<JsonFilesType>("pt-br");
+    interpreter.defaultLanguage = "es";
+    expect(interpreter.defaultLanguage).toEqual<JsonFilesType>("es");
+    expect(interpreter.defaultLanguage).not.toEqual<JsonFilesType>("pt-br");
   });
 });

@@ -4,7 +4,7 @@ import { execSync } from "child_process";
 import { mkdirSync, mkdtempSync, rmdirSync, writeFileSync } from "fs";
 
 let folderNumber = 0;
-const versionsPath = resolve(join(__dirname, "../../versions"));
+const versionsPath = resolve(join(__dirname, "../versions"));
 
 interface GenerateEnvInterface {
   /** EnvironmentOptions */
@@ -14,6 +14,14 @@ interface GenerateEnvInterface {
   /** ExecuteOptions */
   returnString?: boolean;
 }
+
+export const rmdir = (tempDir: string) => {
+  rmdirSync(tempDir, { recursive: true });
+};
+
+export const generateTempDir = (folderName: string) => {
+  return mkdtempSync(join(tmpdir(), folderName));
+};
 
 /**
  * Generate a environment with a temporary directory
@@ -30,8 +38,7 @@ export const generateEnv = ({
 }: GenerateEnvInterface) => {
   // Caminho do diretório temporário para o teste
   folderNumber++;
-  const folderName = `interpreter-temp-folder-${folderNumber}`;
-  const tempDir = mkdtempSync(join(tmpdir(), folderName));
+  const tempDir = generateTempDir(`interpreter-temp-folder-${folderNumber}`);
 
   // Camihho para a versão da biblioteca que será instalada
   const tarballPath = resolve(join(versionsPath, libVersion));
@@ -90,7 +97,10 @@ const createFile = ({
   tempDir,
 }: { tempDir: string } & Partial<GenerateEnvInterface>) => {
   return (content: string) => {
-    const testFilePath = join(tempDir, module === "cjs" ? "index.ts" : "index.js");
+    const testFilePath = join(
+      tempDir,
+      module === "cjs" ? "index.ts" : "index.js",
+    );
     writeFileSync(testFilePath, content);
     return testFilePath;
   };
@@ -104,7 +114,6 @@ const exec = ({
   returnString,
 }: { tempDir: string } & Partial<GenerateEnvInterface>) => {
   return (removeTempDir: boolean = true): string | Buffer<ArrayBufferLike> => {
-
     let result;
 
     const filePathToExecute = join(
@@ -112,21 +121,18 @@ const exec = ({
       module === "cjs" ? "index.ts" : "index.js",
     );
 
-
     try {
-      if (module === 'cjs') {
+      if (module === "cjs") {
         result = execSync(`npx ts-node "${filePathToExecute}"`, {
           cwd: tempDir,
           stdio: ["pipe", "pipe", "pipe"],
         });
-
-      } else if (module === 'esm') {
+      } else if (module === "esm") {
         result = execSync(`node "${filePathToExecute}"`, {
           cwd: tempDir,
           stdio: ["pipe", "pipe", "pipe"],
         });
       }
-
     } catch (e) {
       /**
        * Se não for para remover o diretório
@@ -135,8 +141,7 @@ const exec = ({
       if (!removeTempDir) throw e;
     }
 
-
-    if (removeTempDir) rmdirSync(tempDir, { recursive: true });
+    if (removeTempDir) rmdir(tempDir);
 
     if (!!returnString) return result.toString().trim();
     else return result;
