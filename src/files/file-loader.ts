@@ -83,30 +83,21 @@ export class FileLoader<T extends FileStructureType = any> {
   static generateTypes(baseDir: string) {
     /** Content that will be generated in the file with the types */
     const fileNames = [];
-    const nameTypes = [];
 
     // Create a "types" folder inside baseDir
-    const typesDir = join(baseDir, "types");
+    const typesDir = resolve(join(baseDir, "types"));
     if (!existsSync(typesDir)) {
       mkdirSync(typesDir);
     }
-
-    const formatName = (str: string, upperCase = true) =>
-      str
-        .replace(/\b\w/g, (char) =>
-          upperCase ? char.toUpperCase() : char.toLowerCase(),
-        )
-        .replaceAll("-", "_")
-        .replaceAll(".", "_");
 
     // Recursive function to access several levels
     const recursiveFileStructure = (dir: string): void => {
       const entries = readdirSync(dir, { withFileTypes: true });
 
       entries.forEach((entry) => {
-        const entryPath = join(dir, entry.name);
         const isDirectory = entry.isDirectory();
         const name = entry.name.replace(".json", "");
+        const entryPath = resolve(join(dir, entry.name));
 
         if (isDirectory || entry.name.endsWith(".json")) {
           if (isDirectory) {
@@ -114,38 +105,11 @@ export class FileLoader<T extends FileStructureType = any> {
           } else {
             const readFile = JSON.parse(readFileSync(entryPath, "utf-8"));
 
-            /**
-             * Function to convert the JSON structure in type
-             */
-            const generateTypeDefinationJSON = (
-              object: any,
-              indent: number = 2,
-            ): string => {
-              const entries = Object.entries(object)
-                .map(([key, value]) => {
-                  if (typeof value === "string") {
-                    return `${" ".repeat(indent)}${key}: string;`;
-                  } else if (typeof value === "object" && value !== null) {
-                    const lastIndent = `${" ".repeat(indent)}`;
-                    const firstIndentAndKey = `${" ".repeat(indent)}${key}`;
-                    const recursiveKeys = generateTypeDefinationJSON(
-                      value,
-                      indent + 2,
-                    );
-
-                    return `${firstIndentAndKey}: {\n${recursiveKeys}\n${lastIndent}};`;
-                  }
-                })
-                .filter(Boolean);
-
-              return entries.join("\n");
-            };
-
-            // Format the file name to TitleCase
-            const nameTitle = formatName(name);
+            // Format the file name to TitleC ase
+            const nameTitle = this.formatJsonName(name);
 
             // Convert the JSON structure in type
-            const content = generateTypeDefinationJSON(readFile);
+            const content = this.generateTypeDefinationJSON(readFile);
             // typeFilesDefinitionContent += `export type ${nameTitle} = {\n${content}\n};\n`;
 
             const typeFilePath = join(typesDir, `${name}.d.ts`);
@@ -156,7 +120,6 @@ export class FileLoader<T extends FileStructureType = any> {
             );
 
             fileNames.push(name);
-            nameTypes.push(nameTitle);
           }
         }
       });
@@ -164,49 +127,76 @@ export class FileLoader<T extends FileStructureType = any> {
 
     recursiveFileStructure(baseDir);
 
+    // Gerenate the indes.d.ts file
+    this.generateIndexFile(typesDir, fileNames);
+  }
+
+  /**
+   * formats the name of the JSON file
+   * @param str
+   * @param upperCase
+   * @returns
+   */
+  private static formatJsonName(str: string, upperCase = true) {
+    return str
+      .replace(/\b\w/g, (char) =>
+        upperCase ? char.toUpperCase() : char.toLowerCase(),
+      )
+      .replaceAll("-", "_")
+      .replaceAll(".", "_");
+  }
+
+  /**
+   * Function to convert the JSON structure in type
+   */
+  private static generateTypeDefinationJSON(
+    object: any,
+    indent: number = 2,
+  ): string {
+    const entries = Object.entries(object)
+      .map(([key, value]) => {
+        if (typeof value === "string") {
+          return `${" ".repeat(indent)}${key}: string;`;
+        } else if (typeof value === "object" && value !== null) {
+          const lastIndent = `${" ".repeat(indent)}`;
+          const firstIndentAndKey = `${" ".repeat(indent)}${key}`;
+          const recursiveKeys = this.generateTypeDefinationJSON(
+            value,
+            indent + 2,
+          );
+
+          return `${firstIndentAndKey}: {\n${recursiveKeys}\n${lastIndent}};`;
+        }
+      })
+      .filter(Boolean);
+
+    return entries.join("\n");
+  }
+
+  private static generateIndexFile(
+    typesDir: string,
+    fileNames: string[],
+  ) {
     // Gera o arquivo "json-structures.type.d.ts" com as importações e exportações
     const imports = fileNames
       .map(
         (name) =>
-          `import ${formatName(name, false)} from './${name}';\nexport * as ${formatName(name, false)} from './${name}';\n`,
+          `import ${this.formatJsonName(name, false)} from './${name}';
+export * as ${this.formatJsonName(name, false)} from './${name}';\n`,
       )
       .join("\n");
+
+
+    const namesToLanguageNamesTypes = fileNames.map((name) => `"${name}"`).join(" | ") || "any";
+    const namesToLanguagesTypes = fileNames.map(name => this.formatJsonName(name, false)).join(" | ") || "any";
+
     const jsonTypes = `${imports}\n
-/**
- * Types to represent the JSON structures of the files
- */
-export type JsonTypes = ${nameTypes.join(" | ") || "any"};
+/**\n * Type to group the types of JSON files\n */
+export type LanguagesTypes = ${namesToLanguagesTypes};\n
+/**\n * Types to represent the names of JSON files\n */
+export type LanguageNamesTypes = ${namesToLanguageNamesTypes};`;
 
-/**
- * Types to represent the JSON files
- */
-export type JsonFilesType = ${fileNames.map((name) => `"${name.toLowerCase()}"`).join(" | ") || "any"};
-`;
-
-    // Salva o arquivo "json-structures.type.d.ts"
+    // Save "index.d.ts"
     writeFileSync(join(typesDir, "index.d.ts"), jsonTypes, "utf-8");
-
-    // // Presentation of the exported Type and Enum
-    // let jsonTypes = `/**\n * Types to represent the JSON structures of the files\n */\n`;
-
-    // // File exports
-    // const types = fileNames.map((name) => `"${name.toLowerCase()}"`);
-    // jsonTypes += `export type JsonTypes = ${nameTypes.join(" | ") || "any"};`;
-    // jsonTypes += `\n\nexport type JsonFilesType = ${types.join(" | ") || "any"};`;
-
-    // // Presentation of existing types
-    // jsonTypes += `\n\n/**\n * Structures of each JSON file represented in a specific type\n${nameTypes.map((name) => ` * @see ${name}`).join("\n") || " *"}\n */`;
-
-    // // Type contents
-    // jsonTypes += !!typeFilesDefinitionContent
-    //   ? `\n\n${typeFilesDefinitionContent}`
-    //   : "\n";
-
-    // // Saves the new JsonTypes file
-    // writeFileSync(
-    //   join(baseDir, "json-structures.type.d.ts"),
-    //   jsonTypes,
-    //   "utf-8",
-    // );
   }
 }

@@ -15,11 +15,11 @@ export * as pt_br from './pt-br';
 
 
 /**
- * Types to represent the JSON structures of the files
+ * Type to group the types of JSON files
  */
-export type JsonTypes = A | B | En | Es | Pt_Br;
+export type LanguagesTypes = a | b | en | es | pt_br;
 
 /**
- * Types to represent the JSON files
+ * Types to represent the names of JSON files
  */
-export type JsonFilesType = "a" | "b" | "en" | "es" | "pt-br";
+export type LanguageNamesTypes = "a" | "b" | "en" | "es" | "pt-br";

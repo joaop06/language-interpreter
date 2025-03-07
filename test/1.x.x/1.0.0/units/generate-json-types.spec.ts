@@ -106,7 +106,7 @@ describe("generateTypes", () => {
 
     // Verifica se o arquivo de tipos está vazio (apenas com a estrutura básica)
     const typeFileContent = readFileSync(typeIndexFilePath, "utf-8");
-    expect(typeFileContent).toContain("export type JsonTypes = any;");
-    expect(typeFileContent).toContain("export type JsonFilesType = any;");
+    expect(typeFileContent).toContain("export type LanguagesTypes = any;");
+    expect(typeFileContent).toContain("export type LanguageNamesTypes = any;");
   });
 });

@@ -1,3 +1,4 @@
+import { resolve } from "path";
 import { existsSync } from "fs";
 import { Logger } from "./helper/logger";
 import { Exception } from "./helper/exception";
@@ -17,7 +18,12 @@ export class Interpreter<T = string> {
   constructor(config: Config) {
     this.logger = new Logger("Interpreter");
 
-    const { localesPath, defaultLanguage = "en" } = config;
+    const { localesPath, defaultLanguage } = config;
+
+    // Verify the locales path
+    if (!existsSync(resolve(localesPath))) {
+      throw new Exception(`Locales path not found: path "${localesPath}"`);
+    }
 
     // Generate a JSON Types
     FileLoader.generateTypes(localesPath);
@@ -26,18 +32,22 @@ export class Interpreter<T = string> {
     this.structure = this.fileLoader.structure;
 
     // Sets the default language if not provided
-    this.defaultLanguage = defaultLanguage;
+    if (!!defaultLanguage) this.defaultLanguage = defaultLanguage;
   }
 
   get defaultLanguage() {
     return this._defaultLanguage;
   }
 
-  set defaultLanguage(value: string) {
+  setDefaultLanguage(value: string) {
+    this.defaultLanguage = value;
+  }
+
+  private set defaultLanguage(value: string) {
     const filePath = this.fileLoader.structure[value];
 
     if (!filePath || !existsSync(filePath)) {
-      throw new Exception(`language file "${value}" not found`);
+      throw new Exception(`Language file "${value}" not found`);
     }
 
     this._defaultLanguage = value;
@@ -63,10 +73,6 @@ export class Interpreter<T = string> {
 
     // Mensagem original (pode ter placeholders como {{field}})
     let message: string = currPath;
-
-    if (typeof message !== "string") {
-      throw new Exception(`Message path is not a string: ${code}`);
-    }
 
     if (message.includes("{{") && message.includes("}}") && !args) {
       throw new Exception(

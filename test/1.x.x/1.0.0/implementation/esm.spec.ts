@@ -1,7 +1,7 @@
 import { it, expect, describe } from "vitest";
 import { generateEnv } from "../../../helper";
 
-describe.concurrent.skip("ESM Implementation", () => {
+describe.concurrent("ESM Implementation", () => {
   it("should load the ESM module using require", () => {
     const { exec, createFile } = generateEnv({
       module: "esm",
@@ -9,10 +9,10 @@ describe.concurrent.skip("ESM Implementation", () => {
     });
 
     // Cria o arquivo de teste
-    createFile(
-      `const { Interpreter } = require('interpreter');
-            console.log('Module loaded successfully');`,
-    );
+    createFile(`
+      const { Interpreter } = require('interpreter');
+      console.log('Module loaded successfully');
+    `);
 
     // Verifica se o módulo foi carregado sem erros
     expect(() => exec(false)).not.toThrow();
@@ -25,20 +25,20 @@ describe.concurrent.skip("ESM Implementation", () => {
       returnString: true,
     });
 
-    createFile(
-      `const { Interpreter } = require('interpreter');
-                const interpreter = new Interpreter({
-                    defaultLanguage: 'example',
-                    basePath: "./locales"
-                });`,
-    );
+    createFile(`
+      const { Interpreter } = require('interpreter');
+      const interpreter = new Interpreter({
+          defaultLanguage: 'example',
+          localesPath: "./locales"
+      });
+    `);
 
     try {
       exec(false);
     } catch (e: any) {
       const error = e.stderr.toString();
       expect(error).toContain(
-        `ENOENT: no such file or directory, scandir './locales'`,
+        `Locales path not found: path "./locales"`,
       );
     } finally {
       expect(() => exec()).toThrow();
@@ -58,13 +58,12 @@ describe.concurrent.skip("ESM Implementation", () => {
      * Cria o arquivo index no diretório temporário
      * com o código para o teste da implementação
      */
-    createFile(
-      `const { Interpreter } = require('interpreter');
-    
-                const interpreter = new Interpreter({
-                    basePath: "${localesDir.replace(/\\/g, "\\\\")}"
-                });`,
-    );
+    createFile(`
+      const { Interpreter } = require('interpreter');
+      const interpreter = new Interpreter({
+          localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
+      });
+    `);
 
     // Verifica a saída
     expect(exec).not.toThrow();
@@ -85,15 +84,15 @@ describe.concurrent.skip("ESM Implementation", () => {
      * Cria o arquivo index no diretório temporário
      * com o código para o teste da implementação
      */
-    createFile(
-      `const { Interpreter } = require('interpreter');
+    createFile(`
+      const { Interpreter } = require('interpreter');
     
-                const interpreter = new Interpreter({
-                    defaultLanguage: 'example',
-                    basePath: "${localesDir.replace(/\\/g, "\\\\")}"
-                });
-                console.log(interpreter.translate('key1'));`,
-    );
+      const interpreter = new Interpreter({
+          defaultLanguage: 'example',
+          localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
+      });
+      console.log(interpreter.translate('key1'));
+    `);
 
     try {
       exec(false);
@@ -120,15 +119,15 @@ describe.concurrent.skip("ESM Implementation", () => {
      * Cria o arquivo index no diretório temporário
      * com o código para o teste da implementação
      */
-    createFile(
-      `const { Interpreter } = require('interpreter');
+    createFile(`
+      const { Interpreter } = require('interpreter');
     
-                const interpreter = new Interpreter({
-                    defaultLanguage: 'example',
-                    basePath: "${localesDir.replace(/\\/g, "\\\\")}"
-                });
-                console.log(interpreter.translate('key'));`,
-    );
+      const interpreter = new Interpreter({
+          defaultLanguage: 'example',
+          localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
+      });
+      console.log(interpreter.translate('key'));
+    `);
 
     // Verifica a saída
     expect(exec(false)).toBe("value");
@@ -154,14 +153,14 @@ describe.concurrent.skip("ESM Implementation", () => {
     createFile(
       `const { Interpreter } = require('interpreter');
     
-                const interpreter = new Interpreter({
-                    defaultLanguage: 'example',
-                    basePath: "${localesDir.replace(/\\/g, "\\\\")}"
-                });
-               
-                interpreter.language = 'example2';
-                console.log(interpreter.translate('key3'));`,
-    );
+      const interpreter = new Interpreter({
+          defaultLanguage: 'example',
+          localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
+      });
+      
+      interpreter.setDefaultLanguage('example2');
+      console.log(interpreter.translate('key3'));
+    `);
 
     // Verifica a saída
     expect(exec(false)).toBe("value3");
@@ -184,18 +183,18 @@ describe.concurrent.skip("ESM Implementation", () => {
      * Cria o arquivo index no diretório temporário
      * com o código para o teste da implementação
      */
-    createFile(
-      `const { Interpreter } = require('interpreter');
+    createFile(`
+      const { Interpreter } = require('interpreter');
     
-                const interpreter = new Interpreter({
-                    defaultLanguage: 'example',
-                    basePath: "${localesDir.replace(/\\/g, "\\\\")}"
-                });
-                console.log(interpreter.translate('key'));
-                
-                interpreter.language = 'example2';
-                console.log(interpreter.translate('key5'));`,
-    );
+      const interpreter = new Interpreter({
+          defaultLanguage: 'example',
+          localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
+      });
+      console.log(interpreter.translate('key'));
+      
+      interpreter.setDefaultLanguage('example2');
+      console.log(interpreter.translate('key5'));
+    `);
 
     try {
       exec(false);
@@ -223,24 +222,132 @@ describe.concurrent.skip("ESM Implementation", () => {
      * Cria o arquivo index no diretório temporário
      * com o código para o teste da implementação
      */
-    createFile(
-      `const { Interpreter } = require('interpreter');
+    createFile(`
+      const { Interpreter } = require('interpreter');
     
-                const interpreter = new Interpreter({
-                    defaultLanguage: 'example',
-                    basePath: "${localesDir.replace(/\\/g, "\\\\")}"
-                });
-                console.log(interpreter.translate('key'));
-                
-                interpreter.language = 'example2';
-                console.log(interpreter.translate('key'));`,
-    );
+      const interpreter = new Interpreter({
+          defaultLanguage: 'example',
+          localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
+      });
+      console.log(interpreter.translate('key'));
+      
+      interpreter.setDefaultLanguage('example2');
+      console.log(interpreter.translate('key'));
+    `);
 
     try {
       exec(false);
     } catch (e: any) {
       const error = e.stderr.toString();
       expect(error).toContain("Exception: Key not found: key");
+    } finally {
+      expect(exec).toThrow();
+    }
+  });
+
+  it("should not be able set a non existent language", () => {
+    const { exec, createLocaleFiles, createFile } = generateEnv({
+      module: "esm",
+      returnString: true,
+    });
+
+    // Diretório temporário para os arquivos de traduções
+    const localesDir = createLocaleFiles([
+      { example: { key: "value", key2: "value2" } },
+    ]);
+
+    /**
+     * Cria o arquivo index no diretório temporário
+     * com o código para o teste da implementação
+     */
+    createFile(`
+      const { Interpreter } = require('interpreter');
+    
+      const interpreter = new Interpreter({
+          defaultLanguage: 'example',
+          localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
+      });
+      
+      interpreter.setDefaultLanguage('example2');
+    `);
+
+    try {
+      exec(false);
+    } catch (e: any) {
+      const error = e.stderr.toString();
+      expect(error).toContain(`Language file "example2" not found`);
+    } finally {
+      expect(exec).toThrow();
+    }
+  });
+
+  it("should not be able translate a message without code", () => {
+    const { exec, createLocaleFiles, createFile } = generateEnv({
+      module: "esm",
+      returnString: true,
+    });
+
+    // Diretório temporário para os arquivos de traduções
+    const localesDir = createLocaleFiles([
+      { example: { key: "value", key2: "value2" } },
+    ]);
+
+    /**
+     * Cria o arquivo index no diretório temporário
+     * com o código para o teste da implementação
+     */
+    createFile(`
+      const { Interpreter } = require('interpreter');
+    
+      const interpreter = new Interpreter({
+          defaultLanguage: 'example',
+          localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
+      });
+      
+      console.log(interpreter.translate(''));
+    `);
+
+    try {
+      exec(false);
+    } catch (e: any) {
+      const error = e.stderr.toString();
+      expect(error).toContain(`The code from message is missing`);
+    } finally {
+      expect(exec).toThrow();
+    }
+  });
+
+  it("should return an error because the message needs argument, but is not given", () => {
+    const { exec, createLocaleFiles, createFile } = generateEnv({
+      module: "esm",
+      returnString: true,
+    });
+
+    // Diretório temporário para os arquivos de traduções
+    const localesDir = createLocaleFiles([
+      { example: { key: "value", hello: "Hello, {{name}}!!" } },
+    ]);
+
+    /**
+     * Cria o arquivo index no diretório temporário
+     * com o código para o teste da implementação
+     */
+    createFile(`
+        const { Interpreter } = require('interpreter');
+        
+        const interpreter = new Interpreter({
+            defaultLanguage: 'example',
+            localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
+        });
+        
+        console.log(interpreter.translate('hello'));
+      `);
+
+    try {
+      exec(false);
+    } catch (e: any) {
+      const error = e.stderr.toString();
+      expect(error).toContain(`Arguments are needed for the desired message: hello`);
     } finally {
       expect(exec).toThrow();
     }
