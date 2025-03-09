@@ -1,4 +1,5 @@
 type Pt_Br = {
+  HELLO: string;
   SUCCESS: {
     RESOURCE: {
       CREATED: string;

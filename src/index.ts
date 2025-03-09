@@ -5,6 +5,7 @@ import { Exception } from "./helper/exception";
 import { FileLoader } from "./files/file-loader";
 import { Config } from "./interfaces/config.interface";
 import { InterpreterCodeKeys } from "./types/interpreter-code-keys.type";
+import { TranslateOptions } from "types/translate-options.type";
 
 export class Interpreter<T = string> {
   private logger: Logger;
@@ -44,22 +45,27 @@ export class Interpreter<T = string> {
   }
 
   private set defaultLanguage(value: string) {
-    const filePath = this.fileLoader.structure[value];
-
-    if (!filePath || !existsSync(filePath)) {
-      throw new Exception(`Language file "${value}" not found`);
-    }
-
+    this.validateStructureFiles(value);
     this._defaultLanguage = value;
   }
 
-  translate(code: InterpreterCodeKeys<T>, options: any = {}): string | null {
+  private validateStructureFiles(language: string): void {
+    const filePath = this.fileLoader.structure[language];
+
+    if (!filePath || !existsSync(filePath)) {
+      throw new Exception(`Language file "${language}" not found`);
+    }
+  }
+
+  translate(code: InterpreterCodeKeys<T>, options: TranslateOptions = {}): string | null {
     if (!code) throw new Exception("The code from message is missing");
 
     const { lang, args } = options;
-    if (!!lang && this._defaultLanguage !== lang) this._defaultLanguage = lang;
+    const language = lang || this.defaultLanguage;
 
-    const file = this.fileLoader.readFile(this._defaultLanguage);
+    this.validateStructureFiles(language);
+
+    const file = this.fileLoader.readFile(language);
 
     let currPath = file;
     const keys = code?.split(".");

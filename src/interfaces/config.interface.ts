@@ -1,4 +1,4 @@
-export type Config = BaseConfig & (DebugLogConfig | OtherLogConfig);
+export type Config = BaseConfig // & (DebugLogConfig | OtherLogConfig);
 
 interface BaseConfig {
   localesPath: string;

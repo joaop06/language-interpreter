@@ -1,4 +1,5 @@
 type En = {
+  HELLO: string;
   BACANA: string;
   ERRORS: {
     MODULES: {

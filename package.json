@@ -15,11 +15,10 @@
   "homepage": "https://github.com/joaop06/interpreter#readme",
   "description": "Interpreter is a library designed to optimize the management of predefined messages in several languages, simplifying translations in multilingual applications. It supports the mapping of message files in JSON format, dynamic language resolution and fallback handling for missing translations. Ideal for standardizing and optimizing localization workflows in projects of any scale.",
   "scripts": {
-    "test": "vitest",
     "clean:build": "rimraf dist",
-    "coverage": "vitest --coverage",
     "build-pack": "npm pack && node move-pack.js",
-    "test-w": "nodemon --watch .env --exec \"vitest\"",
+    "coverage": "npm run build && vitest --coverage",
+    "test": "nodemon --watch .env --exec \"npm run build && vitest\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix && prettier --write \"src/**/*.ts\"",
     "build": "npm run clean:build && tsc -p tsconfig.build.json && tsc --project tsconfig.cjs.json && npm run build-pack"
   },

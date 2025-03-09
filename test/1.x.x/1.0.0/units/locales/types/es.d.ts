@@ -1,4 +1,5 @@
 type Es = {
+  HELLO: string;
   ERRORS: {
     MODULES: {
       APPOINTMENTS: {

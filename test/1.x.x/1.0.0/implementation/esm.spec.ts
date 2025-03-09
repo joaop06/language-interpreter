@@ -1,7 +1,10 @@
+import { config } from "dotenv";
 import { it, expect, describe } from "vitest";
 import { generateEnv } from "../../../helper";
 
-describe.concurrent("ESM Implementation", () => {
+config();
+
+describe.skipIf(process.env.SKIP_IMPLEMENTATION_TESTS === 'true').concurrent("ESM Implementation", () => {
   it("should load the ESM module using require", () => {
     const { exec, createFile } = generateEnv({
       module: "esm",
@@ -348,6 +351,184 @@ describe.concurrent("ESM Implementation", () => {
     } catch (e: any) {
       const error = e.stderr.toString();
       expect(error).toContain(`Arguments are needed for the desired message: hello`);
+    } finally {
+      expect(exec).toThrow();
+    }
+  });
+
+  it('must be able to translate a message with an argument in implementation test', () => {
+    const { exec, createLocaleFiles, createFile } = generateEnv({
+      module: "esm",
+      returnString: true,
+    });
+
+    // Diretório temporário para os arquivos de traduções
+    const localesDir = createLocaleFiles([
+      { a: { ARGS: { ONE: "This message {{test}} required a argument" } } },
+    ]);
+
+    /**
+     * Cria o arquivo index no diretório temporário
+     * com o código para o teste da implementação
+     */
+    createFile(`
+      const { Interpreter } = require('interpreter');
+
+      const interpreter = new Interpreter({
+        localesPath: "${localesDir.replace(/\\/g, "\\\\")}",
+        defaultLanguage: 'a'
+      });
+      console.log(interpreter.translate('ARGS.ONE', { args: { test: 'test' } }));
+    `);
+
+    expect(exec()).toBe("This message test required a argument");
+  });
+
+  it('should be able translate a message with two arguments using object args in implementation test', () => {
+    const { exec, createLocaleFiles, createFile } = generateEnv({
+      module: "esm",
+      returnString: true,
+    });
+
+    // Diretório temporário para os arquivos de traduções
+    const localesDir = createLocaleFiles([
+      { a: { ARGS: { TWO: "This message {{test}} required two arguments, {{test2}}" } } },
+    ]);
+
+    /**
+     * Cria o arquivo index no diretório temporário
+     * com o código para o teste da implementação
+     */
+    createFile(`
+      const { Interpreter } = require('interpreter');
+
+      const interpreter = new Interpreter({
+        localesPath: "${localesDir.replace(/\\/g, "\\\\")}",
+        defaultLanguage: 'a'
+      });
+      console.log(interpreter.translate('ARGS.TWO', { args: { test: 'test', test2: 'test2' } }));
+    `);
+
+    expect(exec()).toBe("This message test required two arguments, test2");
+  });
+
+  it('should be able translate a message with two arguments using array args in implementation test', () => {
+    const { exec, createLocaleFiles, createFile } = generateEnv({
+      module: "esm",
+      returnString: true,
+    });
+
+    // Diretório temporário para os arquivos de traduções
+    const localesDir = createLocaleFiles([
+      { a: { ARGS: { TWO: "This message {{test}} required two arguments, {{test2}}" } } },
+    ]);
+
+    /**
+     * Cria o arquivo index no diretório temporário
+     * com o código para o teste da implementação
+     */
+    createFile(`
+      const { Interpreter } = require('interpreter');
+
+      const interpreter = new Interpreter({
+        localesPath: "${localesDir.replace(/\\/g, "\\\\")}",
+        defaultLanguage: 'a'
+      });
+      console.log(interpreter.translate('ARGS.TWO', { args: [{ test: 'test' }, { test2: 'test2' }] }));
+    `);
+
+    expect(exec()).toBe("This message test required two arguments, test2");
+  });
+
+  it('it must be possible to translate into the desired language in implementation test', () => {
+    const { exec, createLocaleFiles, createFile } = generateEnv({
+      module: "esm",
+      returnString: true,
+    });
+
+    // Diretório temporário para os arquivos de traduções
+    const localesDir = createLocaleFiles([
+      { es: { HELLO: 'Hola!!!' } },
+      { en: { HELLO: 'Hello!!!' } },
+    ]);
+
+    /**
+     * Cria o arquivo index no diretório temporário
+     * com o código para o teste da implementação
+     */
+    createFile(`
+      const { Interpreter } = require('interpreter');
+
+      const interpreter = new Interpreter({
+        defaultLanguage: 'en',
+        localesPath: "${localesDir.replace(/\\/g, "\\\\")}",
+      });
+      console.log(interpreter.translate('HELLO', { lang: 'es' }));
+    `);
+
+    expect(exec()).toBe("Hola!!!");
+  });
+
+  it('it must be possible to translate into the desired language in implementation test', () => {
+    const { exec, createLocaleFiles, createFile } = generateEnv({
+      module: "esm",
+      returnString: true,
+    });
+
+    // Diretório temporário para os arquivos de traduções
+    const localesDir = createLocaleFiles([
+      { es: { HELLO: 'Hola!!!' } },
+      { en: { HELLO: 'Hello!!!' } },
+    ]);
+
+    /**
+     * Cria o arquivo index no diretório temporário
+     * com o código para o teste da implementação
+     */
+    createFile(`
+      const { Interpreter } = require('interpreter');
+
+      const interpreter = new Interpreter({
+        defaultLanguage: 'en',
+        localesPath: "${localesDir.replace(/\\/g, "\\\\")}",
+      });
+      console.log(interpreter.translate('HELLO', { lang: 'es' }));
+    `);
+
+    expect(exec()).toBe("Hola!!!");
+  });
+
+  it('it must be possible to translate into the desired language in implementation test', () => {
+    const { exec, createLocaleFiles, createFile } = generateEnv({
+      module: "esm",
+      returnString: true,
+    });
+
+    // Diretório temporário para os arquivos de traduções
+    const localesDir = createLocaleFiles([
+      { es: { HELLO: 'Hola!!!' } },
+      { en: { HELLO: 'Hello!!!' } },
+    ]);
+
+    /**
+     * Cria o arquivo index no diretório temporário
+     * com o código para o teste da implementação
+     */
+    createFile(`
+      const { Interpreter } = require('interpreter');
+
+      const interpreter = new Interpreter({
+        defaultLanguage: 'en',
+        localesPath: "${localesDir.replace(/\\/g, "\\\\")}",
+      });
+      console.log(interpreter.translate('HELLO', { lang: 'french' }));
+    `);
+
+    try {
+      exec(false);
+    } catch (e: any) {
+      const error = e.stderr.toString();
+      expect(error).toContain(`Language file "french" not found`);
     } finally {
       expect(exec).toThrow();
     }

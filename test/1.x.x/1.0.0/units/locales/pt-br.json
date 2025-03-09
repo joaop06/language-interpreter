@@ -1,4 +1,5 @@
 {
+    "HELLO": "Olá!!!",
     "SUCCESS": {
         "RESOURCE": {
             "CREATED": "{{resource}} criado com sucesso",

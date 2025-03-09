@@ -43,7 +43,7 @@ export class FileLoader<T extends FileStructureType = any> {
       current = current[part];
     }
 
-    return typeof current === "string" ? current : null;
+    return current;
   }
 
   /**
