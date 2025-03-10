@@ -2,11 +2,11 @@ import fs from "fs";
 import { Logger } from "./logger";
 import {
   it,
+  vi,
   expect,
   describe,
-  beforeEach,
   afterEach,
-  vi,
+  beforeEach,
   MockInstance,
 } from "vitest";
 

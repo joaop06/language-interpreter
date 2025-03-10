@@ -19,6 +19,7 @@
     "strictNullChecks": false, /* When type checking, take into account 'null' and 'undefined'. */
     "maxNodeModuleJsDepth": 10, /* Specify the maximum folder depth used for checking JavaScript files from 'node_modules'. Only applicable with 'allowJs'. */
     "moduleResolution": "node", /* Specify how TypeScript looks up a file from a given module specifier. */
+    // "emitDeclarationOnly": true, /* Only output d.ts files and not JavaScript files. */
     "strictBindCallApply": false, /* Check that the arguments for 'bind', 'call', and 'apply' methods match the original function. */
     "noFallthroughCasesInSwitch": false, /* Enable error reporting for fallthrough cases in switch statements. */
     "allowSyntheticDefaultImports": true, /* Allow 'import x from y' when a module doesn't have a default export. */
@@ -62,7 +63,6 @@
     // "allowJs": true,                                  /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */
     // "checkJs": true,                                  /* Enable error reporting in type-checked JavaScript files. */
     /* Emit */
-    // "emitDeclarationOnly": true,                      /* Only output d.ts files and not JavaScript files. */
     // "inlineSourceMap": true,                          /* Include sourcemap files inside the emitted JavaScript. */
     // "noEmit": true,                                   /* Disable emitting files from a compilation. */
     // "outFile": "./",                                  /* Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output. */

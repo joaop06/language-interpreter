@@ -1,5 +1,6 @@
 import { Interpreter } from "../../../../src";
-import { it, expect, describe, beforeAll } from "vitest";
+import { FileLoader } from "../../../../src/files/file-loader";
+import { it, vi, expect, describe, beforeAll, Mock } from "vitest";
 import { LanguageNamesTypes, LanguagesTypes } from "./locales/types";
 import { Config } from "../../../../src/interfaces/config.interface";
 
@@ -17,11 +18,11 @@ describe("Interpreter instance", () => {
     expect(interpreter).toBeInstanceOf(Interpreter);
   });
 
-  it('should return a error by not found the locales path', () => {
+  it("should return a error by not found the locales path", () => {
     expect(() => {
       new Interpreter({
-        localesPath: __dirname + 'locales2',
-      })
+        localesPath: __dirname + "locales2",
+      });
     }).toThrow();
   });
 
@@ -67,10 +68,10 @@ describe("Interpreter instance", () => {
   it("not found key", () => {
     const interpreter = new Interpreter({
       ...config,
-      defaultLanguage: 'a'
+      defaultLanguage: "a",
     });
 
-    const translate = () => interpreter.translate('key1');
+    const translate = () => interpreter.translate("key1");
 
     expect(translate).toThrow();
 
@@ -85,10 +86,10 @@ describe("Interpreter instance", () => {
   it("message needs argument, but is not given", () => {
     const interpreter = new Interpreter<LanguagesTypes>({
       ...config,
-      defaultLanguage: 'en'
+      defaultLanguage: "en",
     });
 
-    const translate = () => interpreter.translate('ERRORS.VALIDATION.REQUIRED');
+    const translate = () => interpreter.translate("ERRORS.VALIDATION.REQUIRED");
 
     expect(translate).toThrow();
 
@@ -96,70 +97,135 @@ describe("Interpreter instance", () => {
       translate();
     } catch (error: any) {
       const { message } = error;
-      expect(message).toContain(`Arguments are needed for the desired message: ERRORS.VALIDATION.REQUIRED`);
+      expect(message).toContain(
+        `Arguments are needed for the desired message: ERRORS.VALIDATION.REQUIRED`,
+      );
     }
   });
 
-  it('must be able to translate a message with an argument', () => {
+  it("should be able translate a simple message", () => {
     const interpreter = new Interpreter<LanguagesTypes>({
       ...config,
-      defaultLanguage: 'a'
+      defaultLanguage: "en",
     });
 
-    expect(
-      interpreter.translate('ARGS.ONE', { args: { test: 'test' } })
-    ).toBe('This message test required a argument');
+    expect(interpreter.translate("HELLO")).toBe("Hello!!!");
   });
 
-  it('should be able translate a message with two arguments using object args', () => {
+  it("must be able to translate a message with an argument", () => {
     const interpreter = new Interpreter<LanguagesTypes>({
       ...config,
-      defaultLanguage: 'a'
+      defaultLanguage: "a",
     });
 
-    expect(
-      interpreter.translate('ARGS.TWO', { args: { test: 'test', test2: 'test2' } })
-    ).toBe('This message test required two arguments, test2');
+    expect(interpreter.translate("ARGS.ONE", { args: { test: "test" } })).toBe(
+      "This message test required a argument",
+    );
   });
 
-  it('should be able translate a message with two arguments using array args', () => {
+  it("should be able translate a message with two arguments using object args", () => {
     const interpreter = new Interpreter<LanguagesTypes>({
       ...config,
-      defaultLanguage: 'a'
+      defaultLanguage: "a",
     });
 
     expect(
-      interpreter.translate('ARGS.TWO', { args: [{ test: 'test' }, { test2: 'test2' }] })
-    ).toBe('This message test required two arguments, test2');
+      interpreter.translate("ARGS.TWO", {
+        args: { test: "test", test2: "test2" },
+      }),
+    ).toBe("This message test required two arguments, test2");
   });
 
-  it('it must be possible to translate into the desired language', () => {
+  it("should be able translate a message with two arguments using array args", () => {
     const interpreter = new Interpreter<LanguagesTypes>({
       ...config,
-      defaultLanguage: 'en'
+      defaultLanguage: "a",
     });
 
     expect(
-      interpreter.translate('HELLO', { lang: 'es' })
-    ).toBe('Hola!!!');
-    expect(interpreter.defaultLanguage).toBe<LanguageNamesTypes>('en');
+      interpreter.translate("ARGS.TWO", {
+        args: [{ test: "test" }, { test2: "test2" }],
+      }),
+    ).toBe("This message test required two arguments, test2");
   });
 
-  it(`it shouldn't be possible to translate because the desired language doesn't exist`, () => {
+  it("it must be possible to translate into the desired language", () => {
     const interpreter = new Interpreter<LanguagesTypes>({
       ...config,
-      defaultLanguage: 'en'
+      defaultLanguage: "en",
     });
 
-    expect(
-      () => interpreter.translate('HELLO', { lang: 'french' })
-    ).toThrow();
+    expect(interpreter.translate("HELLO", { lang: "es" })).toBe("Hola!!!");
+    expect(interpreter.defaultLanguage).toBe<LanguageNamesTypes>("en");
+  });
+
+  it.skip(`it shouldn't be possible to translate because the desired language doesn't exist`, () => {
+    const interpreter = new Interpreter<LanguagesTypes>({
+      ...config,
+      defaultLanguage: "en",
+    });
+
+    expect(() => interpreter.translate("HELLO", { lang: "fr" })).toThrow();
 
     try {
-      interpreter.translate('HELLO', { lang: 'french' });
+      interpreter.translate("HELLO", { lang: "fr" });
     } catch (e: any) {
       const error = e.message;
-      expect(error).toContain(`Language file "french" not found`);
+      expect(error).toContain(`Language file "fr" not found`);
     }
+  });
+
+  it("must be return a message using the default language by not found `lang`", () => {
+    vi.doMock("../../../../src/files/file-loader", () => ({
+      FileLoader: {
+        init: vi.fn(),
+        generateTypes: vi.fn(),
+        validateStructureFiles: vi.fn(),
+      },
+    }));
+
+    vi.doMock("../../../../src/helper/logger", () => ({
+      Logger: vi.fn(() => ({
+        log: vi.fn(),
+        error: vi.fn(),
+      })),
+    }));
+
+    const mockFileLoader = {
+      structure: {
+        es: { HELLO: "Hola!!!" },
+        en: { HELLO: "Hello!!!" },
+      },
+      validateStructureFiles: vi.fn((value) => {
+        if (value === "invalid") {
+          throw new Error("Invalid structure");
+        }
+        return true;
+      }),
+      readFile: vi.fn((fileName) => {
+        if (fileName === "not found") {
+          throw new Error(`File not found: ${fileName}`);
+        }
+        return true;
+      }),
+    };
+
+    (FileLoader.init as Mock).mockReturnValue(mockFileLoader);
+    (FileLoader.generateTypes as Mock).mockImplementation(() => {});
+
+    const interpreter = new Interpreter<LanguagesTypes>({
+      ...config,
+      defaultLanguage: "en",
+    });
+
+    expect(interpreter).toBeTruthy();
+    expect(FileLoader.init).toHaveBeenCalledWith(config.localesPath);
+    expect(FileLoader.generateTypes).toHaveBeenCalledWith(config.localesPath);
+    expect(mockFileLoader.structure).toEqual({
+      es: { HELLO: "Hola!!!" },
+      en: { HELLO: "Hello!!!" },
+    });
+
+    expect(interpreter.translate("HELLO", { lang: "fr" })).toBe("Hello!!!");
   });
 });

@@ -4,8 +4,11 @@ import { Logger } from "./helper/logger";
 import { Exception } from "./helper/exception";
 import { FileLoader } from "./files/file-loader";
 import { Config } from "./interfaces/config.interface";
+import { TranslateOptions } from "./types/translate-options.type";
 import { InterpreterCodeKeys } from "./types/interpreter-code-keys.type";
-import { TranslateOptions } from "types/translate-options.type";
+
+export { TranslateOptions } from "./types/translate-options.type";
+export { InterpreterCodeKeys } from "./types/interpreter-code-keys.type";
 
 export class Interpreter<T = string> {
   private logger: Logger;
@@ -45,30 +48,36 @@ export class Interpreter<T = string> {
   }
 
   private set defaultLanguage(value: string) {
-    this.validateStructureFiles(value);
+    this.fileLoader.validateStructureFiles(value);
     this._defaultLanguage = value;
   }
 
-  private validateStructureFiles(language: string): void {
-    const filePath = this.fileLoader.structure[language];
-
-    if (!filePath || !existsSync(filePath)) {
-      throw new Exception(`Language file "${language}" not found`);
-    }
-  }
-
-  translate(code: InterpreterCodeKeys<T>, options: TranslateOptions = {}): string | null {
+  translate(
+    code: InterpreterCodeKeys<T>,
+    options: TranslateOptions = {},
+  ): string | null {
     if (!code) throw new Exception("The code from message is missing");
 
     const { lang, args } = options;
     const language = lang || this.defaultLanguage;
 
-    this.validateStructureFiles(language);
+    let file: string;
+    try {
+      // Validates that the language file exists
+      this.fileLoader.validateStructureFiles(language);
 
-    const file = this.fileLoader.readFile(language);
+      // Read file language
+      file = this.fileLoader.readFile(language);
+    } catch (e) {
+      // If you tried to read it with the default value, it will throw the error
+      if (language === this.defaultLanguage) throw e;
+
+      // Otherwise, it will try again with the default value
+      file = this.fileLoader.readFile(this.defaultLanguage);
+    }
 
     let currPath = file;
-    const keys = code?.split(".");
+    const keys = code.split(".");
     for (const key of keys) {
       if (currPath[key]) {
         currPath = currPath[key];

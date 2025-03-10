@@ -1,6 +1,6 @@
 import {
-  existsSync,
   mkdirSync,
+  existsSync,
   readdirSync,
   readFileSync,
   writeFileSync,
@@ -12,7 +12,7 @@ export type FileStructureType = {
   [key: string]: FileStructureType | string;
 };
 
-export class FileLoader<T extends FileStructureType = any> {
+export class FileLoader<T = any> {
   constructor(
     public basePath: string,
     public structure: T,
@@ -32,6 +32,14 @@ export class FileLoader<T extends FileStructureType = any> {
 
     // eslint-disable-next-line
     return require(resolve(fullPath));
+  }
+
+  public validateStructureFiles(language: string): void {
+    const filePath = this.structure[language];
+
+    if (!filePath || !existsSync(resolve(filePath))) {
+      throw new Exception(`Language file "${language}" not found`);
+    }
   }
 
   private resolvePath(fileName: string, structure: any): string | null {
@@ -173,10 +181,7 @@ export class FileLoader<T extends FileStructureType = any> {
     return entries.join("\n");
   }
 
-  private static generateIndexFile(
-    typesDir: string,
-    fileNames: string[],
-  ) {
+  private static generateIndexFile(typesDir: string, fileNames: string[]) {
     // Gera o arquivo "json-structures.type.d.ts" com as importações e exportações
     const imports = fileNames
       .map(
@@ -186,9 +191,11 @@ export * as ${this.formatJsonName(name, false)} from './${name}';\n`,
       )
       .join("\n");
 
-
-    const namesToLanguageNamesTypes = fileNames.map((name) => `"${name}"`).join(" | ") || "any";
-    const namesToLanguagesTypes = fileNames.map(name => this.formatJsonName(name, false)).join(" | ") || "any";
+    const namesToLanguageNamesTypes =
+      fileNames.map((name) => `"${name}"`).join(" | ") || "any";
+    const namesToLanguagesTypes =
+      fileNames.map((name) => this.formatJsonName(name, false)).join(" | ") ||
+      "any";
 
     const jsonTypes = `${imports}\n
 /**\n * Type to group the types of JSON files\n */

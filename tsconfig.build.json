@@ -6,6 +6,5 @@
         "**/*spec.ts",
         "node_modules",
         "vite.config.ts",
-        ".link_interpreter",
     ]
 }
