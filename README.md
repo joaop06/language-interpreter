@@ -1,6 +1,6 @@
 # Interpreter
 
-`Interpreter` is a lightweight and efficient Node.js library for managing predefined message files in multiple languages, simplifying the translation process for multilingual applications. It provides dynamic language resolution, support for various file formats, and automatic fallback handling, making it an ideal tool for localization workflows.
+`Interpreter` is a lightweight and efficient Node.js library for managing predefined message files in multiple languages, simplifying the process of translating multilingual applications. It offers dynamic language resolution based on predefined message files in JSON format, making it an ideal tool for localization workflows.
 
 ---
 
@@ -11,7 +11,6 @@
 - **Flexible File Support**: Works with JSON, YAML, and other common formats for message storage.
 - **Simple API**: Intuitive and easy-to-use interface for developers.
 - **Scalable**: Supports applications of all sizes, from small projects to enterprise-level systems.
-- **Integration Friendly**: Compatible with popular internationalization libraries like `i18next` and `Intl`.
 
 ---
 
@@ -27,56 +26,6 @@ Or using Yarn:
 
 ```bash
 yarn add interpreter
-```
-
----
-
-## Getting Started
-
-### 1. Importing the Library
-
-```javascript
-const Interpreter = require('interpreter');
-```
-
-### 2. Initializing the Interpreter
-
-Initialize the library by loading your message files:
-
-```javascript
-const messages = {
-  en: require('./locales/en.json'),
-  es: require('./locales/es.json'),
-  fr: require('./locales/fr.json'),
-};
-
-const interpreter = new Interpreter(messages);
-```
-
-### 3. Retrieving Translations
-
-Use the `translate` method to retrieve translations dynamically:
-
-```javascript
-// Set the desired language
-interpreter.setLanguage('es');
-
-// Retrieve a message
-const greeting = interpreter.translate('greeting'); // "Hola"
-console.log(greeting);
-```
-
-### 4. Handling Missing Translations
-
-If a translation is missing, the library will automatically fallback to the default language:
-
-```javascript
-// Default language (e.g., 'en')
-interpreter.setDefaultLanguage('en');
-
-// Retrieve a non-existent key
-const message = interpreter.translate('nonexistent_key'); // "Key not found"
-console.log(message);
 ```
 
 ---
@@ -100,6 +49,7 @@ project/
 {
   "greeting": "Hello",
   "farewell": "Goodbye",
+  "hello": "Hello, {{name}}!!",
   "welcome": "Welcome to our application!"
 }
 ```
@@ -110,8 +60,93 @@ project/
 {
   "greeting": "Hola",
   "farewell": "Adiós",
+  "hello": "Hola, {{name}}!!",
   "welcome": "¡Bienvenido a nuestra aplicación!"
 }
+```
+
+---
+
+## Getting Started
+
+### 1. Importing the Library
+
+```javascript
+const { Interpreter } = require('interpreter');
+```
+Or:
+```javascript
+import { Interpreter } from 'interpreter';
+```
+
+### 2. Initializing the Interpreter
+
+Initialize the library to generate its type files based on the JSON files in the "locales" directory:
+
+```javascript
+const interpreter = new Interpreter({
+	defaultLanguage: 'en',
+	localesPath: __dirname + 'locales',
+});
+```
+
+This will generate a types folder in the specified directory that can be imported from the “index.d.ts” file with the “LanguagesTypes” type to facilitate usability.
+
+```javascript
+import { Interpreter } from 'interpreter';
+import { LanguagesTypes } from './locales/types';
+
+const interpreter = new Interpreter<LanguagesTypes>({
+    defaultLanguage: 'en',
+    localesPath: __dirname + 'locales',
+});
+```
+
+### 3. Set default language
+
+You can set a new default language:
+
+```javascript
+// Set the desired default language (optional)
+interpreter.setDefaultLanguage('es');
+```
+
+### 4. Retrieving Translations
+
+Use the `translate` method to retrieve translations dynamically:
+
+```javascript
+// Retrieve a message
+const greeting = interpreter.translate('greeting'); // "Hello"
+console.log(greeting);
+```
+
+### 5. Translate options
+
+#### Lang
+
+```javascript
+const greeting = interpreter.translate('greeting', { lang: 'pt-br' }); // "Hello"
+console.log(greeting);
+```
+
+#### Args
+```javascript
+const greeting = interpreter.translate('hello', { args: { name: 'John' } }); // "Hello"
+console.log(greeting);
+```
+
+### 6. Handling Missing Translations
+
+If a translation is missing, the library will automatically fallback to the default language:
+
+```javascript
+// Default language (e.g., 'en')
+interpreter.setDefaultLanguage('en');
+
+// Retrieve a non-existent key
+const message = interpreter.translate('nonexistent_key'); // throw Error "Key not found"
+console.log(message);
 ```
 
 ---
