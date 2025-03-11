@@ -548,9 +548,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
     });
 
     // Diretório temporário para os arquivos de traduções
-    const localesDir = createLocaleFiles([
-      { en: { HELLO: "Hello!!!" } },
-    ]);
+    const localesDir = createLocaleFiles([{ en: { HELLO: "Hello!!!" } }]);
 
     /**
      * Cria o arquivo index no diretório temporário

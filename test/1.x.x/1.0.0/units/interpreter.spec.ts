@@ -1,8 +1,7 @@
 import { Interpreter } from "../../../../src";
-import { FileLoader } from "../../../../src/files/file-loader";
-import { it, vi, expect, describe, beforeAll, Mock, afterEach, beforeEach } from "vitest";
 import { LanguageNamesTypes, LanguagesTypes } from "./locales/types";
 import { Config } from "../../../../src/interfaces/config.interface";
+import { it, vi, expect, describe, afterEach, beforeAll } from "vitest";
 
 describe("Interpreter instance", () => {
   let config: Config;
@@ -173,7 +172,7 @@ describe("Interpreter instance", () => {
     expect(interpreter.translate("HELLO", { lang: "fr" })).toBe("Hello!!!");
   });
 
-  it('should return an error when not finding the standard language file when translating a message', () => {
+  it("should return an error when not finding the standard language file when translating a message", () => {
     // Crie uma instância
     const interpreter = new Interpreter({
       ...config,
@@ -181,11 +180,11 @@ describe("Interpreter instance", () => {
     });
 
     // Salve o fileLoader original
-    const originalFileLoader = interpreter['fileLoader'];
+    const originalFileLoader = interpreter["fileLoader"];
 
     try {
       // Substitua por um mock temporário
-      interpreter['fileLoader'] = {
+      interpreter["fileLoader"] = {
         structure: {
           es: { HELLO: "Hola!!!" },
           en: { HELLO: "Hello!!!" },
@@ -201,14 +200,13 @@ describe("Interpreter instance", () => {
         }),
       } as any;
 
-      expect(interpreter['fileLoader'].structure.es.HELLO).toBe('Hola!!!');
-      expect(interpreter['fileLoader'].structure.en.HELLO).toBe('Hello!!!');
+      expect(interpreter["fileLoader"].structure.es.HELLO).toBe("Hola!!!");
+      expect(interpreter["fileLoader"].structure.en.HELLO).toBe("Hello!!!");
 
       expect(() => interpreter.translate("HELLO")).toThrow();
-
     } finally {
       // Restaure o original
-      interpreter['fileLoader'] = originalFileLoader;
+      interpreter["fileLoader"] = originalFileLoader;
     }
   });
 });

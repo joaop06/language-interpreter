@@ -4,7 +4,6 @@ import { generateEnv } from "../../../helper";
 
 config();
 
-
 const skipTests = process.env.SKIP_IMPLEMENTATION_TESTS === "true";
 
 describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
@@ -492,9 +491,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
     });
 
     // Diretório temporário para os arquivos de traduções
-    const localesDir = createLocaleFiles([
-      { en: { HELLO: "Hello!!!" } },
-    ]);
+    const localesDir = createLocaleFiles([{ en: { HELLO: "Hello!!!" } }]);
 
     /**
      * Cria o arquivo index no diretório temporário

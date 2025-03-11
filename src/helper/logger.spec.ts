@@ -1,5 +1,3 @@
-import fs from "fs";
-import { Logger } from "./logger";
 import {
   it,
   vi,
@@ -9,6 +7,8 @@ import {
   beforeEach,
   MockInstance,
 } from "vitest";
+import fs from "fs";
+import { Logger } from "./logger";
 
 describe("Logger", () => {
   let consoleLogSpy: MockInstance;
