@@ -1,6 +1,6 @@
 import { Interpreter } from "../../../../src";
 import { FileLoader } from "../../../../src/files/file-loader";
-import { it, vi, expect, describe, beforeAll, Mock } from "vitest";
+import { it, vi, expect, describe, beforeAll, Mock, afterEach, beforeEach } from "vitest";
 import { LanguageNamesTypes, LanguagesTypes } from "./locales/types";
 import { Config } from "../../../../src/interfaces/config.interface";
 
@@ -11,6 +11,11 @@ describe("Interpreter instance", () => {
     config = {
       localesPath: __dirname + "/locales",
     };
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   it("should be return a Interpreter", () => {
@@ -61,7 +66,7 @@ describe("Interpreter instance", () => {
       interpreter.translate("");
     } catch (error: any) {
       const { message } = error;
-      expect(message).toContain(`The code from message is missing`);
+      expect(message).toContain(`The key from message is missing`);
     }
   });
 
@@ -159,73 +164,51 @@ describe("Interpreter instance", () => {
     expect(interpreter.defaultLanguage).toBe<LanguageNamesTypes>("en");
   });
 
-  it.skip(`it shouldn't be possible to translate because the desired language doesn't exist`, () => {
-    const interpreter = new Interpreter<LanguagesTypes>({
-      ...config,
-      defaultLanguage: "en",
-    });
-
-    expect(() => interpreter.translate("HELLO", { lang: "fr" })).toThrow();
-
-    try {
-      interpreter.translate("HELLO", { lang: "fr" });
-    } catch (e: any) {
-      const error = e.message;
-      expect(error).toContain(`Language file "fr" not found`);
-    }
-  });
-
   it("must be return a message using the default language by not found `lang`", () => {
-    vi.doMock("../../../../src/files/file-loader", () => ({
-      FileLoader: {
-        init: vi.fn(),
-        generateTypes: vi.fn(),
-        validateStructureFiles: vi.fn(),
-      },
-    }));
-
-    vi.doMock("../../../../src/helper/logger", () => ({
-      Logger: vi.fn(() => ({
-        log: vi.fn(),
-        error: vi.fn(),
-      })),
-    }));
-
-    const mockFileLoader = {
-      structure: {
-        es: { HELLO: "Hola!!!" },
-        en: { HELLO: "Hello!!!" },
-      },
-      validateStructureFiles: vi.fn((value) => {
-        if (value === "invalid") {
-          throw new Error("Invalid structure");
-        }
-        return true;
-      }),
-      readFile: vi.fn((fileName) => {
-        if (fileName === "not found") {
-          throw new Error(`File not found: ${fileName}`);
-        }
-        return true;
-      }),
-    };
-
-    (FileLoader.init as Mock).mockReturnValue(mockFileLoader);
-    (FileLoader.generateTypes as Mock).mockImplementation(() => {});
-
     const interpreter = new Interpreter<LanguagesTypes>({
       ...config,
       defaultLanguage: "en",
-    });
-
-    expect(interpreter).toBeTruthy();
-    expect(FileLoader.init).toHaveBeenCalledWith(config.localesPath);
-    expect(FileLoader.generateTypes).toHaveBeenCalledWith(config.localesPath);
-    expect(mockFileLoader.structure).toEqual({
-      es: { HELLO: "Hola!!!" },
-      en: { HELLO: "Hello!!!" },
     });
 
     expect(interpreter.translate("HELLO", { lang: "fr" })).toBe("Hello!!!");
+  });
+
+  it('should return an error when not finding the standard language file when translating a message', () => {
+    // Crie uma instância
+    const interpreter = new Interpreter({
+      ...config,
+      defaultLanguage: "en",
+    });
+
+    // Salve o fileLoader original
+    const originalFileLoader = interpreter['fileLoader'];
+
+    try {
+      // Substitua por um mock temporário
+      interpreter['fileLoader'] = {
+        structure: {
+          es: { HELLO: "Hola!!!" },
+          en: { HELLO: "Hello!!!" },
+        },
+        validateStructureFiles: vi.fn((value) => {
+          if (value === "invalid") {
+            throw new Error("Invalid structure");
+          }
+          return true;
+        }),
+        readFile: vi.fn((fileName) => {
+          throw new Error(`File not found: ${fileName}`);
+        }),
+      } as any;
+
+      expect(interpreter['fileLoader'].structure.es.HELLO).toBe('Hola!!!');
+      expect(interpreter['fileLoader'].structure.en.HELLO).toBe('Hello!!!');
+
+      expect(() => interpreter.translate("HELLO")).toThrow();
+
+    } finally {
+      // Restaure o original
+      interpreter['fileLoader'] = originalFileLoader;
+    }
   });
 });

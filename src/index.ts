@@ -5,15 +5,13 @@ import { Exception } from "./helper/exception";
 import { FileLoader } from "./files/file-loader";
 import { Config } from "./interfaces/config.interface";
 import { TranslateOptions } from "./types/translate-options.type";
-import { InterpreterCodeKeys } from "./types/interpreter-code-keys.type";
+import { InterpreterCodeKeys } from "./types/interpreter-translate-keys.type";
 
 export { TranslateOptions } from "./types/translate-options.type";
-export { InterpreterCodeKeys } from "./types/interpreter-code-keys.type";
+export { InterpreterCodeKeys } from "./types/interpreter-translate-keys.type";
 
 export class Interpreter<T = string> {
   private logger: Logger;
-
-  private structure: any;
 
   private fileLoader: FileLoader;
 
@@ -33,7 +31,6 @@ export class Interpreter<T = string> {
     FileLoader.generateTypes(localesPath);
 
     this.fileLoader = FileLoader.init(localesPath);
-    this.structure = this.fileLoader.structure;
 
     // Sets the default language if not provided
     if (!!defaultLanguage) this.defaultLanguage = defaultLanguage;
@@ -53,10 +50,10 @@ export class Interpreter<T = string> {
   }
 
   translate(
-    code: InterpreterCodeKeys<T>,
+    key: InterpreterCodeKeys<T>,
     options: TranslateOptions = {},
   ): string | null {
-    if (!code) throw new Exception("The code from message is missing");
+    if (!key) throw new Exception("The key from message is missing");
 
     const { lang, args } = options;
     const language = lang || this.defaultLanguage;
@@ -77,12 +74,12 @@ export class Interpreter<T = string> {
     }
 
     let currPath = file;
-    const keys = code.split(".");
+    const keys = key.split(".");
     for (const key of keys) {
       if (currPath[key]) {
         currPath = currPath[key];
       } else {
-        throw new Exception(`Key not found: ${code}`);
+        throw new Exception(`Key not found: ${key}`);
       }
     }
 
@@ -91,7 +88,7 @@ export class Interpreter<T = string> {
 
     if (message.includes("{{") && message.includes("}}") && !args) {
       throw new Exception(
-        `Arguments are needed for the desired message: ${code}`,
+        `Arguments are needed for the desired message: ${key}`,
       );
     }
 
