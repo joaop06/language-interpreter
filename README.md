@@ -47,7 +47,6 @@ project/
 
 ```json
 {
-  "greeting": "Hello",
   "farewell": "Goodbye",
   "hello": "Hello, {{name}}!!",
   "welcome": "Welcome to our application!"
@@ -58,7 +57,6 @@ project/
 
 ```json
 {
-  "greeting": "Hola",
   "farewell": "Adiós",
   "hello": "Hola, {{name}}!!",
   "welcome": "¡Bienvenido a nuestra aplicación!"
@@ -117,8 +115,8 @@ Use the `translate` method to retrieve translations dynamically:
 
 ```javascript
 // Retrieve a message
-const greeting = interpreter.translate('greeting'); // "Hello"
-console.log(greeting);
+const farewell = interpreter.translate('farewell');
+console.log(farewell); // "Hello"
 ```
 
 ### 5. Translate options
@@ -126,14 +124,14 @@ console.log(greeting);
 #### Lang
 
 ```javascript
-const greeting = interpreter.translate('greeting', { lang: 'pt-br' }); // "Hello"
-console.log(greeting);
+const farewell = interpreter.translate('farewell', { lang: 'pt-br' });
+console.log(farewell); // "Hello"
 ```
 
 #### Args
 ```javascript
-const greeting = interpreter.translate('hello', { args: { name: 'John' } }); // "Hello"
-console.log(greeting);
+const hello = interpreter.translate('hello', { args: { name: 'John' } });
+console.log(farewell); // "Hello, John!!"
 ```
 
 ### 6. Handling Missing Translations
@@ -146,40 +144,34 @@ interpreter.setDefaultLanguage('en');
 
 // Retrieve a non-existent key
 const message = interpreter.translate('nonexistent_key'); // throw Error "Key not found"
-console.log(message);
 ```
 
 ---
 
 ## API Reference
 
-### `Interpreter(messages: object)`
+### `Interpreter(config: Config)`
 Creates a new instance of the `Interpreter`.
 
 - **Parameters:**
-  - `messages` (object): An object containing language codes as keys and message objects as values.
+  - `localesPath` (string): Path of the translation files.
+  - `defaultLanguage` (string): Default language to be used if no other language is specified or found.
 
-### `setLanguage(language: string)`
-Sets the current language for translations.
+### `setDefaultLanguage(language: string)`
+Set the new default language for translations.
 
 - **Parameters:**
   - `language` (string): The language code (e.g., `en`, `es`).
 
-### `setDefaultLanguage(language: string)`
-Sets the default language to use as a fallback.
-
-- **Parameters:**
-  - `language` (string): The default language code.
-
-### `translate(key: string, variables?: object)`
+### `translate(key: string, options?: TranslateOptions)`
 Retrieves the translation for a given key.
 
 - **Parameters:**
   - `key` (string): The key to look up in the message files.
-  - `variables` (object, optional): An object containing variables to replace in the translation string.
+  - `options` (object, optional): An object that contains translation options, such as language and/or arguments with values to be replaced in the translated message.
 
 - **Returns:**
-  - `string`: The translated message or a fallback message if the key is not found.
+  - `string`: The translated message.
 
 ### Example with Variables:
 
@@ -208,7 +200,7 @@ console.log(message); // "Welcome, John!"
 
 We welcome contributions to improve the `Interpreter` library! Please follow these steps:
 
-1. Fork the repository.
+1. Fork the [GitHub repository](https://github.com/joaop06/Interpreter).
 2. Create a new branch (`feature/new-feature`).
 3. Commit your changes.
 4. Open a pull request.
@@ -223,10 +215,5 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Support
 
-If you encounter any issues or have questions, feel free to open an issue on the [GitHub repository](https://github.com/yourusername/interpreter) or reach out to us directly.
+If you encounter any issues or have questions, feel free to open an issue on the [GitHub repository](https://github.com/joaop06/Interpreter) or reach out to us directly.
 
----
-
-## Acknowledgments
-
-Special thanks to the open-source community for inspiring the development of this library.
