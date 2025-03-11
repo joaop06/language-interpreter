@@ -15,7 +15,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
 
     // Cria o arquivo de teste
     createFile(`
-      import { Interpreter } from 'interpreter';
+      import { Interpreter } from 'language-interpreter';
       console.log('Module loaded successfully');
     `);
 
@@ -31,7 +31,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
     });
 
     createFile(`
-      import { Interpreter } from 'interpreter';
+      import { Interpreter } from 'language-interpreter';
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
           localesPath: "./locales"
@@ -62,7 +62,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      import { Interpreter } from 'interpreter';
+      import { Interpreter } from 'language-interpreter';
       const interpreter = new Interpreter({
           localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
       });
@@ -88,7 +88,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      import { Interpreter } from 'interpreter';
+      import { Interpreter } from 'language-interpreter';
 
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
@@ -123,7 +123,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      import { Interpreter } from 'interpreter';
+      import { Interpreter } from 'language-interpreter';
 
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
@@ -154,7 +154,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      import { Interpreter } from 'interpreter';
+      import { Interpreter } from 'language-interpreter';
 
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
@@ -187,7 +187,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      import { Interpreter } from 'interpreter';
+      import { Interpreter } from 'language-interpreter';
 
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
@@ -226,7 +226,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      import { Interpreter } from 'interpreter';
+      import { Interpreter } from 'language-interpreter';
 
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
@@ -265,7 +265,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
      */
     expect(() => {
       createFile(`
-        import { Interpreter } from 'interpreter';
+        import { Interpreter } from 'language-interpreter';
   
         const interpreter = new Interpreter({
             defaultLanguage: 'example',
@@ -279,7 +279,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
 
     // Sobrescrever o arquivo index.ts com a nova importação
     createFile(`
-      import { Interpreter } from 'interpreter';
+      import { Interpreter } from 'language-interpreter';
       import { LanguagesTypes } from './locales/types';
 
       const interpreter = new Interpreter<LanguagesTypes>({
@@ -309,7 +309,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
      */
     expect(() => {
       createFile(`
-        import { Interpreter } from 'interpreter';
+        import { Interpreter } from 'language-interpreter';
   
         const interpreter = new Interpreter({
             defaultLanguage: 'example',
@@ -321,7 +321,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
     }).not.toThrow();
 
     createFile(`
-      import { Interpreter } from 'interpreter';
+      import { Interpreter } from 'language-interpreter';
       import { LanguagesTypes } from './locales/types';
 
       const interpreter = new Interpreter<LanguagesTypes>({
@@ -358,7 +358,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      import { Interpreter } from 'interpreter';
+      import { Interpreter } from 'language-interpreter';
       
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
@@ -394,7 +394,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-        import { Interpreter } from 'interpreter';
+        import { Interpreter } from 'language-interpreter';
         
         const interpreter = new Interpreter({
             defaultLanguage: 'example',
@@ -432,7 +432,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      import { Interpreter } from 'interpreter';
+      import { Interpreter } from 'language-interpreter';
 
       const interpreter = new Interpreter({
         localesPath: "${localesDir.replace(/\\/g, "\\\\")}",
@@ -466,7 +466,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      import { Interpreter } from 'interpreter';
+      import { Interpreter } from 'language-interpreter';
 
       const interpreter = new Interpreter({
         localesPath: "${localesDir.replace(/\\/g, "\\\\")}",
@@ -500,7 +500,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      import { Interpreter } from 'interpreter';
+      import { Interpreter } from 'language-interpreter';
 
       const interpreter = new Interpreter({
         localesPath: "${localesDir.replace(/\\/g, "\\\\")}",
@@ -529,7 +529,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      import { Interpreter } from 'interpreter';
+      import { Interpreter } from 'language-interpreter';
 
       const interpreter = new Interpreter({
         defaultLanguage: 'en',
@@ -555,7 +555,7 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      import { Interpreter } from 'interpreter';
+      import { Interpreter } from 'language-interpreter';
 
       const interpreter = new Interpreter({
         defaultLanguage: 'en',

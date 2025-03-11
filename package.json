@@ -4,7 +4,7 @@
   ],
   "license": "ISC",
   "version": "1.0.0",
-  "name": "interpreter",
+  "name": "language-interpreter",
   "author": "João Pedro",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -15,7 +15,7 @@
       "require": "./dist/cjs/index.js"
     }
   },
-  "homepage": "https://github.com/joaop06/interpreter#readme",
+  "homepage": "https://github.com/joaop06/language-interpreter#readme",
   "description": "Interpreter is a library designed to optimize the management of predefined messages in several languages, simplifying translations in multilingual applications. It supports the mapping of message files in JSON format, dynamic language resolution and fallback handling for missing translations. Ideal for standardizing and optimizing localization workflows in projects of any scale.",
   "scripts": {
     "clean:build": "rimraf dist",
@@ -42,7 +42,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joaop06/interpreter.git"
+    "url": "git+https://github.com/joaop06/language-interpreter.git"
   },
   "keywords": [
     "i18n",
@@ -53,7 +53,7 @@
     "multilingual"
   ],
   "bugs": {
-    "url": "https://github.com/joaop06/interpreter/issues"
+    "url": "https://github.com/joaop06/language-interpreter/issues"
   },
   "directories": {
     "test": "test"
