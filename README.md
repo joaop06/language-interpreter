@@ -19,13 +19,13 @@
 To install the library, run the following command:
 
 ```bash
-npm install interpreter
+npm install language-interpreter
 ```
 
 Or using Yarn:
 
 ```bash
-yarn add interpreter
+yarn add language-interpreter
 ```
 
 ---
@@ -70,11 +70,11 @@ project/
 ### 1. Importing the Library
 
 ```javascript
-const { Interpreter } = require('interpreter');
+const { Interpreter } = require('language-interpreter');
 ```
 Or:
 ```javascript
-import { Interpreter } from 'interpreter';
+import { Interpreter } from 'language-interpreter';
 ```
 
 ### 2. Initializing the Interpreter
@@ -91,7 +91,7 @@ const interpreter = new Interpreter({
 This will generate a types folder in the specified directory that can be imported from the “index.d.ts” file with the “LanguagesTypes” type to facilitate usability.
 
 ```javascript
-import { Interpreter } from 'interpreter';
+import { Interpreter } from 'language-interpreter';
 import { LanguagesTypes } from './locales/types';
 
 const interpreter = new Interpreter<LanguagesTypes>({

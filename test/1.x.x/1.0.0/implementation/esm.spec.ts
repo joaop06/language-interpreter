@@ -15,7 +15,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
 
     // Cria o arquivo de teste
     createFile(`
-      const { Interpreter } = require('interpreter');
+      const { Interpreter } = require('language-interpreter');
       console.log('Module loaded successfully');
     `);
 
@@ -31,7 +31,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
     });
 
     createFile(`
-      const { Interpreter } = require('interpreter');
+      const { Interpreter } = require('language-interpreter');
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
           localesPath: "./locales"
@@ -62,7 +62,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      const { Interpreter } = require('interpreter');
+      const { Interpreter } = require('language-interpreter');
       const interpreter = new Interpreter({
           localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
       });
@@ -88,7 +88,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      const { Interpreter } = require('interpreter');
+      const { Interpreter } = require('language-interpreter');
     
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
@@ -123,7 +123,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      const { Interpreter } = require('interpreter');
+      const { Interpreter } = require('language-interpreter');
     
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
@@ -154,7 +154,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(
-      `const { Interpreter } = require('interpreter');
+      `const { Interpreter } = require('language-interpreter');
     
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
@@ -188,7 +188,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      const { Interpreter } = require('interpreter');
+      const { Interpreter } = require('language-interpreter');
     
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
@@ -227,7 +227,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      const { Interpreter } = require('interpreter');
+      const { Interpreter } = require('language-interpreter');
     
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
@@ -265,7 +265,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      const { Interpreter } = require('interpreter');
+      const { Interpreter } = require('language-interpreter');
     
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
@@ -301,7 +301,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      const { Interpreter } = require('interpreter');
+      const { Interpreter } = require('language-interpreter');
     
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
@@ -337,7 +337,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-        const { Interpreter } = require('interpreter');
+        const { Interpreter } = require('language-interpreter');
         
         const interpreter = new Interpreter({
             defaultLanguage: 'example',
@@ -375,7 +375,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      const { Interpreter } = require('interpreter');
+      const { Interpreter } = require('language-interpreter');
 
       const interpreter = new Interpreter({
         localesPath: "${localesDir.replace(/\\/g, "\\\\")}",
@@ -409,7 +409,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      const { Interpreter } = require('interpreter');
+      const { Interpreter } = require('language-interpreter');
 
       const interpreter = new Interpreter({
         localesPath: "${localesDir.replace(/\\/g, "\\\\")}",
@@ -443,7 +443,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      const { Interpreter } = require('interpreter');
+      const { Interpreter } = require('language-interpreter');
 
       const interpreter = new Interpreter({
         localesPath: "${localesDir.replace(/\\/g, "\\\\")}",
@@ -472,7 +472,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      const { Interpreter } = require('interpreter');
+      const { Interpreter } = require('language-interpreter');
 
       const interpreter = new Interpreter({
         defaultLanguage: 'en',
@@ -498,7 +498,7 @@ describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
      * com o código para o teste da implementação
      */
     createFile(`
-      const { Interpreter } = require('interpreter');
+      const { Interpreter } = require('language-interpreter');
 
       const interpreter = new Interpreter({
         defaultLanguage: 'en',
