@@ -1,0 +1,10 @@
+{
+    "extends": "./tsconfig.json",
+    "exclude": [
+        "test",
+        "dist",
+        "**/*spec.ts",
+        "node_modules",
+        "vite.config.ts",
+    ]
+}

@@ -1,0 +1,65 @@
+{
+    "HELLO": "Hello!!!",
+    "BACANA": "SHOWWWW",
+    "ERRORS": {
+        "MODULES": {
+            "APPOINTMENTS": {
+                "CREATE": {
+                    "OVER_LAPPING": "Another appointment overlaps this appointment dates"
+                }
+            }
+        },
+        "VALIDATION": {
+            "REQUIRED": "The {{field}} field is required",
+            "STRING": {
+                "MIN": "The {{field}} field must have at least {{min}} characters",
+                "MAX": "The {{field}} field must have at most {{max}} characters",
+                "EMAIL": "The {{field}} field must be a valid email"
+            },
+            "NUMBER": {
+                "MIN": "The {{field}} field must be greater than or equal to {{min}}",
+                "MAX": "The {{field}} field must be less than or equal to {{max}}",
+                "INTEGER": "The {{field}} field must be an integer"
+            },
+            "DATE": {
+                "INVALID": "Invalid date",
+                "FUTURE": "Date must be in the future",
+                "PAST": "Date must be in the past"
+            }
+        },
+        "AUTH": {
+            "INVALID_CREDENTIALS": "Invalid credentials",
+            "UNAUTHORIZED": "Unauthorized user",
+            "TOKEN_EXPIRED": "Token expired",
+            "TOKEN_INVALID": "Invalid token"
+        },
+        "RESOURCE": {
+            "CREATE": "Failed to create {{resource}}",
+            "DELETE": "Failed to remove {{resource}}",
+            "FIND": "Failed to find {{resource}}",
+            "UPDATE": "Update failed {{resource}}"
+        },
+        "DATABASE": {
+            "CONNECTION": "Database connection error",
+            "QUERY": "Query execution error",
+            "CONSTRAINT": "Database constraint violation"
+        }
+    },
+    "NOTIFICATIONS": {
+        "EMAIL": {
+            "SENT": "Email sent successfully",
+            "FAILED": "Failed to send email"
+        },
+        "PUSH": {
+            "SENT": "Notification sent successfully",
+            "FAILED": "Failed to send notification"
+        }
+    },
+    "COMMON": {
+        "LOADING": "Loading...",
+        "PROCESSING": "Processing...",
+        "NO_RESULTS": "No results found",
+        "WELCOME": "Welcome, {{name}}!",
+        "GOODBYE": "Goodbye, {{name}}!"
+    }
+}

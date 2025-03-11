@@ -1,0 +1,64 @@
+{
+    "HELLO": "Hola!!!",
+    "ERRORS": {
+        "MODULES": {
+            "APPOINTMENTS": {
+                "CREATE": {
+                    "OVER_LAPPING": "Otra cita se solapa con las fechas de esta cita"
+                }
+            }
+        },
+        "VALIDATION": {
+            "REQUIRED": "El campo {{field}} es obligatorio",
+            "STRING": {
+                "MIN": "El campo {{field}} debe tener al menos {{min}} caracteres",
+                "EMAIL": "El campo {{field}} debe ser un correo electrónico válido",
+                "MAX": "El campo {{field}} debe tener como máximo {{max}} caracteres"
+            },
+            "NUMBER": {
+                "INTEGER": "El campo {{field}} debe ser un número entero",
+                "MAX": "El campo {{field}} debe ser menor o igual a {{max}}",
+                "MIN": "El campo {{field}} debe ser mayor o igual a {{min}}"
+            },
+            "DATE": {
+                "INVALID": "Fecha inválida",
+                "FUTURE": "La fecha debe ser futura",
+                "PAST": "La fecha debe ser pasada"
+            }
+        },
+        "AUTH": {
+            "TOKEN_INVALID": "Token inválido",
+            "TOKEN_EXPIRED": "Token expirado",
+            "UNAUTHORIZED": "Usuario no autorizado",
+            "INVALID_CREDENTIALS": "Credenciales inválidas"
+        },
+        "RESOURCE": {
+            "CREATE": "Fallo al crear {{resource}}",
+            "FIND": "Fallo al encontrar {{resource}}",
+            "DELETE": "Fallo al eliminar {{resource}}",
+            "UPDATE": "Fallo en la actualización {{resource}}"
+        },
+        "DATABASE": {
+            "CONNECTION": "Error de conexión con la base de datos",
+            "QUERY": "Error al ejecutar la consulta",
+            "CONSTRAINT": "Violación de restricción en la base de datos"
+        }
+    },
+    "NOTIFICATIONS": {
+        "EMAIL": {
+            "SENT": "Correo electrónico enviado exitosamente",
+            "FAILED": "Error al enviar correo electrónico"
+        },
+        "PUSH": {
+            "SENT": "Notificación enviada exitosamente",
+            "FAILED": "Error al enviar notificación"
+        }
+    },
+    "COMMON": {
+        "LOADING": "Cargando...",
+        "PROCESSING": "Procesando...",
+        "NO_RESULTS": "No se encontraron resultados",
+        "WELCOME": "¡Bienvenido(a), {{name}}!",
+        "GOODBYE": "¡Hasta luego, {{name}}!"
+    }
+}

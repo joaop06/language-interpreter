@@ -1,0 +1,80 @@
+{
+    "HELLO": "Olá!!!",
+    "SUCCESS": {
+        "RESOURCE": {
+            "CREATED": "{{resource}} criado com sucesso",
+            "DELETED": "{{resource}} removido com sucesso",
+            "FOUND": "{{resource}} encontrado com sucesso",
+            "UPDATED": "{{resource}} atualizado com sucesso"
+        }
+    },
+    "ERRORS": {
+        "MODULES": {
+            "APPOINTMENTS": {
+                "CREATE": {
+                    "OVER_LAPPING": "Outro agendamento se sobrepõe a essas datas"
+                }
+            }
+        },
+        "COMMON": {
+            "NOT_FOUND": "Recurso não encontrado",
+            "ALREADY_EXISTS": "Recurso já existe",
+            "CONFLICT": "Conflito ao processar o recurso",
+            "BAD_REQUEST": "Falha na execução da requisição",
+            "INTERNAL_SERVER_ERROR": "Erro interno do servidor",
+            "INVALID_TRANSLATE_CODE": "Código de tradução inválido"
+        },
+        "VALIDATION": {
+            "REQUIRED": "O campo {{field}} é obrigatório",
+            "STRING": {
+                "MIN": "O campo {{field}} deve ter no mínimo {{min}} caracteres",
+                "MAX": "O campo {{field}} deve ter no máximo {{max}} caracteres",
+                "EMAIL": "O campo email deve ser um e-mail válido"
+            },
+            "NUMBER": {
+                "MIN": "O campo {{field}} deve ser maior ou igual a {{min}}",
+                "MAX": "O campo {{field}} deve ser menor ou igual a {{max}}",
+                "INTEGER": "O campo {{field}} deve ser um número inteiro"
+            },
+            "DATE": {
+                "INVALID": "Data inválida",
+                "FUTURE": "A data deve ser futura",
+                "PAST": "A data deve ser passada"
+            }
+        },
+        "AUTH": {
+            "INVALID_CREDENTIALS": "Credenciais inválidas",
+            "UNAUTHORIZED": "Usuário não autorizado",
+            "TOKEN_EXPIRED": "Token expirado",
+            "TOKEN_INVALID": "Token inválido"
+        },
+        "RESOURCE": {
+            "CREATE": "Falha ao criar {{resource}}",
+            "DELETE": "Falha ao remover {{resource}}",
+            "FIND": "Falha ao encontrar {{resource}}",
+            "UPDATE": "Falha ao atualizar {{resource}}"
+        },
+        "DATABASE": {
+            "CONNECTION": "Erro de conexão com o banco de dados",
+            "QUERY": "Erro ao executar consulta",
+            "CONSTRAINT": "Violação de restrição no banco de dados"
+        }
+    },
+    "NOTIFICATIONS": {
+        "EMAIL": {
+            "SENT": "Email enviado com sucesso",
+            "FAILED": "Falha ao enviar email"
+        },
+        "PUSH": {
+            "SENT": "Notificação enviada com sucesso",
+            "FAILED": "Falha ao enviar notificação"
+        }
+    },
+    "COMMON": {
+        "LOADING": "Carregando...",
+        "PROCESSING": "Processando...",
+        "NO_RESULTS": "Nenhum resultado encontrado",
+        "WELCOME": "Bem-vindo(a), {{name}}!",
+        "GOODBYE": "Até logo, {{name}}!"
+    }
+}
