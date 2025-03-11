@@ -3,7 +3,7 @@
     "dist"
   ],
   "license": "ISC",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "language-interpreter",
   "author": "João Pedro",
   "main": "dist/cjs/index.js",
