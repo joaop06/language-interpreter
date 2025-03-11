@@ -173,17 +173,17 @@ describe("Interpreter instance", () => {
   });
 
   it("should return an error when not finding the standard language file when translating a message", () => {
-    // Crie uma instância
+    // Create an instance
     const interpreter = new Interpreter({
       ...config,
       defaultLanguage: "en",
     });
 
-    // Salve o fileLoader original
+    // Save the original fileLoader
     const originalFileLoader = interpreter["fileLoader"];
 
     try {
-      // Substitua por um mock temporário
+      // Replace with a temporary mock
       interpreter["fileLoader"] = {
         structure: {
           es: { HELLO: "Hola!!!" },
@@ -205,7 +205,7 @@ describe("Interpreter instance", () => {
 
       expect(() => interpreter.translate("HELLO")).toThrow();
     } finally {
-      // Restaure o original
+      // Restore the original
       interpreter["fileLoader"] = originalFileLoader;
     }
   });

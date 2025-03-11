@@ -1,6 +1,5 @@
 import { resolve } from "path";
 import { existsSync } from "fs";
-import { Logger } from "./helper/logger";
 import { Exception } from "./helper/exception";
 import { FileLoader } from "./files/file-loader";
 import { Config } from "./interfaces/config.interface";
@@ -11,48 +10,75 @@ export { TranslateOptions } from "./types/translate-options.type";
 export { InterpreterCodeKeys } from "./types/interpreter-translate-keys.type";
 
 export class Interpreter<T = string> {
-  private logger: Logger;
-
   private fileLoader: FileLoader;
-
   private _defaultLanguage: string;
 
+  /**
+   * Creates an instance of Interpreter.
+   * Initializes the file loader and sets the default language.
+   *
+   * @param {Config} config - Configuration object containing localesPath and defaultLanguage.
+   * @throws {Exception} If the locales path is not found.
+   */
   constructor(config: Config) {
-    this.logger = new Logger("Interpreter");
-
     const { localesPath, defaultLanguage } = config;
 
-    // Verify the locales path
+    // Verify that the locales path exists
     if (!existsSync(resolve(localesPath))) {
       throw new Exception(`Locales path not found: path "${localesPath}"`);
     }
 
-    // Generate a JSON Types
+    // Generate TypeScript types based on JSON files in the locales path
     FileLoader.generateTypes(localesPath);
 
+    // Initialize the file loader with the provided locales path
     this.fileLoader = FileLoader.init(localesPath);
 
-    // Sets the default language if not provided
+    // Set the default language if it is provided
     if (!!defaultLanguage) this.defaultLanguage = defaultLanguage;
   }
 
-  get defaultLanguage() {
+  /**
+   * Gets the default language.
+   * @returns {string} The current default language.
+   */
+  get defaultLanguage(): string {
     return this._defaultLanguage;
   }
 
+  /**
+   * Sets the default language.
+   * @param {string} value - The new default language.
+   */
   setDefaultLanguage(value: string) {
     this.defaultLanguage = value;
   }
 
+  /**
+   * Sets the default language and validates its existence.
+   *
+   * @private
+   * @param {string} value - The new default language.
+   * @throws {Exception} If the language file is not found.
+   */
   private set defaultLanguage(value: string) {
     this.fileLoader.validateStructureFiles(value);
     this._defaultLanguage = value;
   }
 
+  /**
+   * Translates a key into the corresponding message.
+   *
+   * @param {InterpreterCodeKeys<T>} key - The key representing the message.
+   * @param {TranslateOptions} [options={}] - Optional parameters including language and arguments.
+   * @returns {string | null} The translated message or null if not found.
+   * @throws {Exception} If the key is missing or translation fails.
+   */
   translate(
     key: InterpreterCodeKeys<T>,
     options: TranslateOptions = {},
   ): string | null {
+    // Ensure the key is provided
     if (!key) throw new Exception("The key from message is missing");
 
     const { lang, args } = options;
@@ -60,19 +86,22 @@ export class Interpreter<T = string> {
 
     let file: string;
     try {
-      // Validates that the language file exists
+      // Validate that the language file exists
       this.fileLoader.validateStructureFiles(language);
 
-      // Read file language
+      // Read the content of the language file
       file = this.fileLoader.readFile(language);
     } catch (e) {
       // If you tried to read it with the default value, it will throw the error
       if (language === this.defaultLanguage) throw e;
 
-      // Otherwise, it will try again with the default value
+      // Try reading the file with the default language
       file = this.fileLoader.readFile(this.defaultLanguage);
     }
 
+    /**
+     * Navigate through the file structure using the key (e.g., 'error.network')
+     */
     let currPath = file;
     const keys = key.split(".");
     for (const key of keys) {
@@ -83,20 +112,24 @@ export class Interpreter<T = string> {
       }
     }
 
-    // Mensagem original (pode ter placeholders como {{field}})
+    // The original message, which may contain placeholders like {{field}}
     let message: string = currPath;
 
+    // If the message contains placeholders but no arguments are provided, throw an error
     if (message.includes("{{") && message.includes("}}") && !args) {
       throw new Exception(
         `Arguments are needed for the desired message: ${key}`,
       );
     }
 
-    // Realiza a substituição dos placeholders (ex: {{field}})
+    // Replace placeholders (e.g., {{field}}) with actual values from args
     if (args) {
       if (Array.isArray(args)) {
         args.forEach((arg) => {
           if (typeof arg === "object") {
+            /**
+             * Replace each placeholder with the corresponding value
+             */
             Object.entries(arg).forEach(([key, value]) => {
               const placeholder = `{{${key}}}`;
               message = message.replace(
@@ -117,6 +150,7 @@ export class Interpreter<T = string> {
       }
     }
 
+    // Return the final translated message
     return message;
   }
 }

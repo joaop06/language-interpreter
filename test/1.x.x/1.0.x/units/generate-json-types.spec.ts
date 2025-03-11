@@ -11,19 +11,19 @@ describe("generateTypes", () => {
     await new Promise((resolve) => setTimeout(resolve, (timeSleep += 10)));
 
   beforeEach(() => {
-    // Cria um diretório de teste antes de cada teste
+    // Create a test directory before each test
     mkdirSync(testDir, { recursive: true });
   });
 
   afterEach(() => {
-    // Remove o diretório de teste após cada teste
+    // Removes the test directory after each test
     rmSync(testDir, { recursive: true, force: true });
   });
 
   it("must create the types based on the JSON files", async () => {
     await sleep();
 
-    // Cria alguns arquivos JSON no diretório de teste
+    // Create some JSON files in the test directory
     writeFileSync(
       join(testDir, "example1.json"),
       JSON.stringify({ key1: "value1", key2: "value2" }),
@@ -35,12 +35,13 @@ describe("generateTypes", () => {
 
     FileLoader.generateTypes(testDir);
 
-    // Verifica se o arquivo de tipos foi criado
+    // Checks that the type file has been created
     const typeIndexFilePath = join(testDir, "types");
     expect(existsSync(typeIndexFilePath)).toBe(true);
 
-    // Verifica o conteúdo do arquivo de tipos
     /**
+     * Checks the contents of the type file
+     *
      * Example file 1
      */
     const typeExample1FilePath = join(testDir, "types", "example1.d.ts");
@@ -62,7 +63,7 @@ describe("generateTypes", () => {
   it("must handle directories with subdirectories correctly", async () => {
     await sleep();
 
-    // Cria uma estrutura de diretórios com subdiretórios e arquivos JSON
+    // Creates a directory structure with subdirectories and JSON files
     mkdirSync(join(testDir, "subdir"));
     writeFileSync(
       join(testDir, "subdir", "example3.json"),
@@ -71,7 +72,7 @@ describe("generateTypes", () => {
 
     FileLoader.generateTypes(testDir);
 
-    // Verifica se o arquivo de tipos foi criado e contém os tipos corretos
+    // Checks that the type file has been created and contains the correct types
     const typeIndexFilePath = join(testDir, "types", "index.d.ts");
     expect(existsSync(typeIndexFilePath)).toBe(true);
 
@@ -89,7 +90,7 @@ describe("generateTypes", () => {
   });
 
   it("must handle invalid JSON files correctly", () => {
-    // Cria um arquivo JSON malformado
+    // Creates a malformed JSON file
     writeFileSync(join(testDir, "invalid.json"), '{"key": "value"');
 
     expect(() => FileLoader.generateTypes(testDir)).toThrow();
@@ -100,11 +101,11 @@ describe("generateTypes", () => {
 
     FileLoader.generateTypes(testDir);
 
-    // Verifica se o arquivo de tipos foi criado, mesmo que o diretório esteja vazio
+    // Checks that the type file has been created, even if the directory is empty
     const typeIndexFilePath = join(testDir, "types", "index.d.ts");
     expect(existsSync(typeIndexFilePath)).toBe(true);
 
-    // Verifica se o arquivo de tipos está vazio (apenas com a estrutura básica)
+    // Checks if the type file is empty (only with the basic structure)
     const typeFileContent = readFileSync(typeIndexFilePath, "utf-8");
     expect(typeFileContent).toContain("export type LanguagesTypes = any;");
     expect(typeFileContent).toContain("export type LanguageNamesTypes = any;");

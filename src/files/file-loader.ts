@@ -42,6 +42,13 @@ export class FileLoader<T = any> {
     }
   }
 
+  /**
+   * Resolve the path to a file within the file structure.
+   *
+   * @param {string} fileName - The name of the file to resolve.
+   * @param {any} structure - The file structure object.
+   * @returns {string | null} - The resolved file path or null if not found.
+   */
   private resolvePath(fileName: string, structure: any): string | null {
     let current = structure;
     const parts = fileName.split(".");
@@ -58,11 +65,12 @@ export class FileLoader<T = any> {
    * Create the file structure using a
    * recursive function to create a file structure at any level
    *
-   * @param {string} dir
-   * @returns {FileStructureType}
+   * @param {string} dir - The base directory to start scanning.
+   * @returns {FileStructureType} - The generated file structure object.
    */
   static createFileStructure(dir: string): FileStructureType {
     // Recursive function to access several levels
+
     const recursiveFileStructure = (dir: string): FileStructureType => {
       const entries = readdirSync(dir, { withFileTypes: true });
 
@@ -84,12 +92,12 @@ export class FileLoader<T = any> {
   }
 
   /**
-   * Generates a file with the types representing the structures of JSON files
+   * Generates TypeScript type definitions based on the JSON file structure.
    *
-   * @param {string} baseDir
+   * @param {string} baseDir - The base directory containing the JSON files.
    */
   static generateTypes(baseDir: string) {
-    /** Content that will be generated in the file with the types */
+    // List of file names used to generate type imports/exports
     const fileNames = [];
 
     // Create a "types" folder inside baseDir
@@ -98,7 +106,7 @@ export class FileLoader<T = any> {
       mkdirSync(typesDir);
     }
 
-    // Recursive function to access several levels
+    // Recursive function to generate types for each JSON file
     const recursiveFileStructure = (dir: string): void => {
       const entries = readdirSync(dir, { withFileTypes: true });
 
@@ -113,13 +121,13 @@ export class FileLoader<T = any> {
           } else {
             const readFile = JSON.parse(readFileSync(entryPath, "utf-8"));
 
-            // Format the file name to TitleC ase
+            // Format the file name to TitleCase
             const nameTitle = this.formatJsonName(name);
 
-            // Convert the JSON structure in type
+            // Convert the JSON structure to TypeScript type definition
             const content = this.generateTypeDefinationJSON(readFile);
-            // typeFilesDefinitionContent += `export type ${nameTitle} = {\n${content}\n};\n`;
 
+            // Generate type definition file
             const typeFilePath = join(typesDir, `${name}.d.ts`);
             writeFileSync(
               typeFilePath,
@@ -135,15 +143,16 @@ export class FileLoader<T = any> {
 
     recursiveFileStructure(baseDir);
 
-    // Gerenate the indes.d.ts file
+    // Generate the index.d.ts file to export all types
     this.generateIndexFile(typesDir, fileNames);
   }
 
   /**
-   * formats the name of the JSON file
-   * @param str
-   * @param upperCase
-   * @returns
+   * Formats the JSON file name into a valid TypeScript type name.
+   *
+   * @param {string} str - The file name to format.
+   * @param {boolean} [upperCase=true] - Whether to capitalize the first letter.
+   * @returns {string} - The formatted name.
    */
   private static formatJsonName(str: string, upperCase = true) {
     return str
@@ -155,7 +164,11 @@ export class FileLoader<T = any> {
   }
 
   /**
-   * Function to convert the JSON structure in type
+   * Converts a JSON object into a TypeScript type definition.
+   *
+   * @param {any} object - The JSON object to convert.
+   * @param {number} [indent=2] - The indentation level.
+   * @returns {string} - The generated TypeScript type definition.
    */
   private static generateTypeDefinationJSON(
     object: any,
@@ -181,8 +194,15 @@ export class FileLoader<T = any> {
     return entries.join("\n");
   }
 
+  /**
+   * Generates an index file to export all types.
+   *
+   * @param {string} typesDir - The directory containing the type files.
+   * @param {string[]} fileNames - The list of generated file names.
+   */
   private static generateIndexFile(typesDir: string, fileNames: string[]) {
-    // Gera o arquivo "json-structures.type.d.ts" com as importações e exportações
+    // Generate imports and exports for each type definition
+
     const imports = fileNames
       .map(
         (name) =>

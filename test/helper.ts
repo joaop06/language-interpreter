@@ -36,20 +36,19 @@ export const generateEnv = ({
   returnString = false,
   libVersion = "language-interpreter-1.0.0.tgz",
 }: GenerateEnvInterface) => {
-  // Caminho do diretório temporário para o teste
+  // Path of the temporary directory for the test
   folderNumber++;
   const tempDir = generateTempDir(
     `language-interpreter-temp-folder-${folderNumber}`,
   );
 
-  // Camihho para a versão da biblioteca que será instalada
+  // Path to the version of the library to be installed
   const tarballPath = resolve(join(versionsPath, libVersion));
 
   /**
-   * Instala a biblioteca no diretório temporário
-   * com base no módulo JavaScript utilizado
+   * Installs the library in the temporary directory based on the JavaScript module used
    *
-   * Caso seja CommonJs (cjs), será criado o arquivo de configuração `tsconfig.json`
+   * If it is CommonJs (cjs), the configuration file `tsconfig.json` will be created.
    */
   if (module === "esm") {
     execSync(`npm init -y && npm install "${tarballPath}"`, { cwd: tempDir });
@@ -137,8 +136,8 @@ const exec = ({
       }
     } catch (e) {
       /**
-       * Se não for para remover o diretório
-       * irá lançar o erro, pois posteriormente irá executar novamente removendo o diretório
+       * If you don't want to remove the directory,
+       * you'll get an error because you'll run it again later, removing the directory
        */
       if (!removeTempDir) throw e;
     }

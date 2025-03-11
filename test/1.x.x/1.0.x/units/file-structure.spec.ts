@@ -44,6 +44,6 @@ describe("FileStructure", () => {
     const structure = FileLoader.createFileStructure(locales);
 
     expect(structure["en"]).toBeDefined();
-    expect(structure["text"]).not.toBeDefined(); // Garantindo que text.txt não seja incluído
+    expect(structure["text"]).not.toBeDefined(); // Ensuring that text.txt is not included
   });
 });

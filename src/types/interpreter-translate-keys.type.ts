@@ -1,8 +1,7 @@
 import { NestedKeyPath } from "./nested-key-path.type";
 
 /**
- * Definição do tipo genérico das chaves JSON
- * que aceita um conjunto dinâmico de estruturas
+ * Definition of the generic JSON key type that accepts a dynamic set of structures
  */
 export type InterpreterCodeKeys<T> = T extends unknown
   ? NestedKeyPath<T>

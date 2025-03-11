@@ -1,6 +1,6 @@
 /**
- * Definição do código/caminho da mensagem
- * baseada no tipo T que é a união dos tipos que representam as estruturas das chaves JSON
+ * Definition of the key/message path in the JSON file based on the T type,
+ * which is the union of the types that represent the JSON key structures.
  */
 export type NestedKeyPath<T> = T extends object
   ? {

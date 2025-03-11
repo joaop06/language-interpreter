@@ -6,32 +6,32 @@ config();
 
 const skipTests = process.env.SKIP_IMPLEMENTATION_TESTS === "true";
 
-describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
-  it("should load the CommonJs module using import", () => {
+describe.skipIf(skipTests).concurrent("ESM Implementation", () => {
+  it("should load the ESM module using require", () => {
     const { exec, createFile } = generateEnv({
-      module: "cjs",
+      module: "esm",
       returnString: true,
     });
 
-    // Cria o arquivo de teste
+    // Creates the test file
     createFile(`
-      import { Interpreter } from 'language-interpreter';
+      const { Interpreter } = require('language-interpreter');
       console.log('Module loaded successfully');
     `);
 
-    // Verifica se o módulo foi carregado sem erros
+    // Checks that the module has been loaded without errors
     expect(() => exec(false)).not.toThrow();
     expect(exec()).toBe("Module loaded successfully");
   });
 
   it("no such locales directory", () => {
     const { exec, createFile } = generateEnv({
-      module: "cjs",
+      module: "esm",
       returnString: true,
     });
 
     createFile(`
-      import { Interpreter } from 'language-interpreter';
+      const { Interpreter } = require('language-interpreter');
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
           localesPath: "./locales"
@@ -50,46 +50,37 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
 
   it("should be able create a new instance of the Interpreter without locale files", () => {
     const { exec, createLocaleFiles, createFile } = generateEnv({
-      module: "cjs",
+      module: "esm",
       returnString: true,
     });
 
-    // Diretório temporário para os arquivos de traduções
+    // Temporary directory for translation files
     const localesDir = createLocaleFiles();
 
-    /**
-     * Cria o arquivo index no diretório temporário
-     * com o código para o teste da implementação
-     */
     createFile(`
-      import { Interpreter } from 'language-interpreter';
+      const { Interpreter } = require('language-interpreter');
       const interpreter = new Interpreter({
           localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
       });
     `);
 
-    // Verifica a saída
     expect(exec).not.toThrow();
   });
 
   it("should return an error when trying to translate a key not found", () => {
     const { exec, createLocaleFiles, createFile } = generateEnv({
-      module: "cjs",
+      module: "esm",
       returnString: true,
     });
 
-    // Diretório temporário para os arquivos de traduções
+    // Temporary directory for translation files
     const localesDir = createLocaleFiles([
       { example: { key: "value", key2: "value2" } },
     ]);
 
-    /**
-     * Cria o arquivo index no diretório temporário
-     * com o código para o teste da implementação
-     */
     createFile(`
-      import { Interpreter } from 'language-interpreter';
-
+      const { Interpreter } = require('language-interpreter');
+    
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
           localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
@@ -109,22 +100,18 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
 
   it("should be able translate a example key", () => {
     const { exec, createLocaleFiles, createFile } = generateEnv({
-      module: "cjs",
+      module: "esm",
       returnString: true,
     });
 
-    // Diretório temporário para os arquivos de traduções
+    // Temporary directory for translation files
     const localesDir = createLocaleFiles([
       { example: { key: "value", key2: "value2" } },
     ]);
 
-    /**
-     * Cria o arquivo index no diretório temporário
-     * com o código para o teste da implementação
-     */
     createFile(`
-      import { Interpreter } from 'language-interpreter';
-
+      const { Interpreter } = require('language-interpreter');
+    
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
           localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
@@ -132,30 +119,25 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
       console.log(interpreter.translate('key'));
     `);
 
-    // Verifica a saída
     expect(exec(false)).toBe("value");
     expect(exec).not.toThrow();
   });
 
   it("should be able set a new default language", () => {
     const { exec, createLocaleFiles, createFile } = generateEnv({
-      module: "cjs",
+      module: "esm",
       returnString: true,
     });
 
-    // Diretório temporário para os arquivos de traduções
+    // Temporary directory for translation files
     const localesDir = createLocaleFiles([
       { example: { key: "value", key2: "value2" } },
       { example2: { key3: "value3", key4: "value4" } },
     ]);
 
-    /**
-     * Cria o arquivo index no diretório temporário
-     * com o código para o teste da implementação
-     */
-    createFile(`
-      import { Interpreter } from 'language-interpreter';
-
+    createFile(
+      `const { Interpreter } = require('language-interpreter');
+    
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
           localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
@@ -163,32 +145,28 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
       
       interpreter.setDefaultLanguage('example2');
       console.log(interpreter.translate('key3'));
-    `);
+    `,
+    );
 
-    // Verifica a saída
     expect(exec(false)).toBe("value3");
     expect(exec).not.toThrow();
   });
 
   it("should return an error when set a new language and trying translate a key not found", () => {
     const { exec, createLocaleFiles, createFile } = generateEnv({
-      module: "cjs",
+      module: "esm",
       returnString: true,
     });
 
-    // Diretório temporário para os arquivos de traduções
+    // Temporary directory for translation files
     const localesDir = createLocaleFiles([
       { example: { key: "value", key2: "value2" } },
       { example2: { key3: "value3", key4: "value4" } },
     ]);
 
-    /**
-     * Cria o arquivo index no diretório temporário
-     * com o código para o teste da implementação
-     */
     createFile(`
-      import { Interpreter } from 'language-interpreter';
-
+      const { Interpreter } = require('language-interpreter');
+    
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
           localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
@@ -211,23 +189,19 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
 
   it("should return an error when set a new language and trying translate a old key", () => {
     const { exec, createLocaleFiles, createFile } = generateEnv({
-      module: "cjs",
+      module: "esm",
       returnString: true,
     });
 
-    // Diretório temporário para os arquivos de traduções
+    // Temporary directory for translation files
     const localesDir = createLocaleFiles([
       { example: { key: "value", key2: "value2" } },
       { example2: { key3: "value3", key4: "value4" } },
     ]);
 
-    /**
-     * Cria o arquivo index no diretório temporário
-     * com o código para o teste da implementação
-     */
     createFile(`
-      import { Interpreter } from 'language-interpreter';
-
+      const { Interpreter } = require('language-interpreter');
+    
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
           localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
@@ -248,83 +222,21 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
     }
   });
 
-  it("it should be possible to implement the library and then type based on the generated LanguagesTypes file", () => {
-    const { exec, createLocaleFiles, createFile } = generateEnv({
-      module: "cjs",
-      returnString: true,
-    });
-
-    // Diretório temporário para os arquivos de traduções
-    const localesDir = createLocaleFiles([
-      { example: { key: "value", key2: "value2" } },
-    ]);
-
-    /**
-     * Cria o arquivo index no diretório temporário
-     * com o código para o teste da implementação
-     */
-    expect(() => {
-      createFile(`
-        import { Interpreter } from 'language-interpreter';
-  
-        const interpreter = new Interpreter({
-            defaultLanguage: 'example',
-            localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
-        });
-        console.log(interpreter.translate('key'));
-      `);
-
-      exec(false);
-    }).not.toThrow();
-
-    // Sobrescrever o arquivo index.ts com a nova importação
-    createFile(`
-      import { Interpreter } from 'language-interpreter';
-      import { LanguagesTypes } from './locales/types';
-
-      const interpreter = new Interpreter<LanguagesTypes>({
-          defaultLanguage: 'example',
-          localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
-      });
-      console.log(interpreter.translate('key'));
-    `);
-
-    expect(exec()).toBe("value");
-  });
-
   it("should not be able set a non existent language", () => {
     const { exec, createLocaleFiles, createFile } = generateEnv({
-      module: "cjs",
+      module: "esm",
       returnString: true,
     });
 
-    // Diretório temporário para os arquivos de traduções
+    // Temporary directory for translation files
     const localesDir = createLocaleFiles([
       { example: { key: "value", key2: "value2" } },
     ]);
 
-    /**
-     * Cria o arquivo index no diretório temporário
-     * com o código para o teste da implementação
-     */
-    expect(() => {
-      createFile(`
-        import { Interpreter } from 'language-interpreter';
-  
-        const interpreter = new Interpreter({
-            defaultLanguage: 'example',
-            localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
-        });
-      `);
-
-      exec(false);
-    }).not.toThrow();
-
     createFile(`
-      import { Interpreter } from 'language-interpreter';
-      import { LanguagesTypes } from './locales/types';
-
-      const interpreter = new Interpreter<LanguagesTypes>({
+      const { Interpreter } = require('language-interpreter');
+    
+      const interpreter = new Interpreter({
           defaultLanguage: 'example',
           localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
       });
@@ -344,22 +256,18 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
 
   it("should not be able translate a message without code", () => {
     const { exec, createLocaleFiles, createFile } = generateEnv({
-      module: "cjs",
+      module: "esm",
       returnString: true,
     });
 
-    // Diretório temporário para os arquivos de traduções
+    // Temporary directory for translation files
     const localesDir = createLocaleFiles([
       { example: { key: "value", key2: "value2" } },
     ]);
 
-    /**
-     * Cria o arquivo index no diretório temporário
-     * com o código para o teste da implementação
-     */
     createFile(`
-      import { Interpreter } from 'language-interpreter';
-      
+      const { Interpreter } = require('language-interpreter');
+    
       const interpreter = new Interpreter({
           defaultLanguage: 'example',
           localesPath: "${localesDir.replace(/\\/g, "\\\\")}"
@@ -380,21 +288,17 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
 
   it("should return an error because the message needs argument, but is not given", () => {
     const { exec, createLocaleFiles, createFile } = generateEnv({
-      module: "cjs",
+      module: "esm",
       returnString: true,
     });
 
-    // Diretório temporário para os arquivos de traduções
+    // Temporary directory for translation files
     const localesDir = createLocaleFiles([
       { example: { key: "value", hello: "Hello, {{name}}!!" } },
     ]);
 
-    /**
-     * Cria o arquivo index no diretório temporário
-     * com o código para o teste da implementação
-     */
     createFile(`
-        import { Interpreter } from 'language-interpreter';
+        const { Interpreter } = require('language-interpreter');
         
         const interpreter = new Interpreter({
             defaultLanguage: 'example',
@@ -418,21 +322,17 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
 
   it("must be able to translate a message with an argument in implementation test", () => {
     const { exec, createLocaleFiles, createFile } = generateEnv({
-      module: "cjs",
+      module: "esm",
       returnString: true,
     });
 
-    // Diretório temporário para os arquivos de traduções
+    // Temporary directory for translation files
     const localesDir = createLocaleFiles([
       { a: { ARGS: { ONE: "This message {{test}} required a argument" } } },
     ]);
 
-    /**
-     * Cria o arquivo index no diretório temporário
-     * com o código para o teste da implementação
-     */
     createFile(`
-      import { Interpreter } from 'language-interpreter';
+      const { Interpreter } = require('language-interpreter');
 
       const interpreter = new Interpreter({
         localesPath: "${localesDir.replace(/\\/g, "\\\\")}",
@@ -446,11 +346,11 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
 
   it("should be able translate a message with two arguments using object args in implementation test", () => {
     const { exec, createLocaleFiles, createFile } = generateEnv({
-      module: "cjs",
+      module: "esm",
       returnString: true,
     });
 
-    // Diretório temporário para os arquivos de traduções
+    // Temporary directory for translation files
     const localesDir = createLocaleFiles([
       {
         a: {
@@ -461,12 +361,8 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
       },
     ]);
 
-    /**
-     * Cria o arquivo index no diretório temporário
-     * com o código para o teste da implementação
-     */
     createFile(`
-      import { Interpreter } from 'language-interpreter';
+      const { Interpreter } = require('language-interpreter');
 
       const interpreter = new Interpreter({
         localesPath: "${localesDir.replace(/\\/g, "\\\\")}",
@@ -480,11 +376,11 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
 
   it("should be able translate a message with two arguments using array args in implementation test", () => {
     const { exec, createLocaleFiles, createFile } = generateEnv({
-      module: "cjs",
+      module: "esm",
       returnString: true,
     });
 
-    // Diretório temporário para os arquivos de traduções
+    // Temporary directory for translation files
     const localesDir = createLocaleFiles([
       {
         a: {
@@ -495,12 +391,8 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
       },
     ]);
 
-    /**
-     * Cria o arquivo index no diretório temporário
-     * com o código para o teste da implementação
-     */
     createFile(`
-      import { Interpreter } from 'language-interpreter';
+      const { Interpreter } = require('language-interpreter');
 
       const interpreter = new Interpreter({
         localesPath: "${localesDir.replace(/\\/g, "\\\\")}",
@@ -514,22 +406,18 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
 
   it("it must be possible to translate into the desired language in implementation test", () => {
     const { exec, createLocaleFiles, createFile } = generateEnv({
-      module: "cjs",
+      module: "esm",
       returnString: true,
     });
 
-    // Diretório temporário para os arquivos de traduções
+    // Temporary directory for translation files
     const localesDir = createLocaleFiles([
       { es: { HELLO: "Hola!!!" } },
       { en: { HELLO: "Hello!!!" } },
     ]);
 
-    /**
-     * Cria o arquivo index no diretório temporário
-     * com o código para o teste da implementação
-     */
     createFile(`
-      import { Interpreter } from 'language-interpreter';
+      const { Interpreter } = require('language-interpreter');
 
       const interpreter = new Interpreter({
         defaultLanguage: 'en',
@@ -543,19 +431,15 @@ describe.skipIf(skipTests).concurrent("CommonJs Implementation", () => {
 
   it("must be return a message using the default language when not found desired language", () => {
     const { exec, createLocaleFiles, createFile } = generateEnv({
-      module: "cjs",
+      module: "esm",
       returnString: true,
     });
 
-    // Diretório temporário para os arquivos de traduções
+    // Temporary directory for translation files
     const localesDir = createLocaleFiles([{ en: { HELLO: "Hello!!!" } }]);
 
-    /**
-     * Cria o arquivo index no diretório temporário
-     * com o código para o teste da implementação
-     */
     createFile(`
-      import { Interpreter } from 'language-interpreter';
+      const { Interpreter } = require('language-interpreter');
 
       const interpreter = new Interpreter({
         defaultLanguage: 'en',
