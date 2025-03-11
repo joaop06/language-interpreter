@@ -34,11 +34,13 @@ export const generateTempDir = (folderName: string) => {
 export const generateEnv = ({
   module,
   returnString = false,
-  libVersion = "interpreter-1.0.0.tgz",
+  libVersion = "language-interpreter-1.0.0.tgz",
 }: GenerateEnvInterface) => {
   // Caminho do diretório temporário para o teste
   folderNumber++;
-  const tempDir = generateTempDir(`interpreter-temp-folder-${folderNumber}`);
+  const tempDir = generateTempDir(
+    `language-interpreter-temp-folder-${folderNumber}`,
+  );
 
   // Camihho para a versão da biblioteca que será instalada
   const tarballPath = resolve(join(versionsPath, libVersion));
