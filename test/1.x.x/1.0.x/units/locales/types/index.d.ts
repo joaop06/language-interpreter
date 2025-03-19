@@ -23,3 +23,14 @@ export type LanguagesTypes = a | b | en | es | pt_br;
  * Types to represent the names of JSON files
  */
 export type LanguageNamesTypes = "a" | "b" | "en" | "es" | "pt-br";
+
+/**
+ * Enum to represent the names of JSON files
+ */
+export enum LanguagesEnum {
+    A = "a",
+    B = "b",
+    EN = "en",
+    ES = "es",
+    PT_BR = "pt-br",
+};

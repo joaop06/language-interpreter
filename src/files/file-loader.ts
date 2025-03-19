@@ -216,12 +216,16 @@ export * as ${this.formatJsonName(name, false)} from './${name}';\n`,
     const namesToLanguagesTypes =
       fileNames.map((name) => this.formatJsonName(name, false)).join(" | ") ||
       "any";
+    const namesToLanguagesEnum =
+      fileNames.map((name) => `\n    ${this.formatJsonName(name).toUpperCase()} = "${name}"`)
 
     const jsonTypes = `${imports}\n
 /**\n * Type to group the types of JSON files\n */
 export type LanguagesTypes = ${namesToLanguagesTypes};\n
 /**\n * Types to represent the names of JSON files\n */
-export type LanguageNamesTypes = ${namesToLanguageNamesTypes};`;
+export type LanguageNamesTypes = ${namesToLanguageNamesTypes};\n
+/**\n * Enum to represent the names of JSON files\n */
+export enum LanguagesEnum {${namesToLanguagesEnum},\n};\n`;
 
     // Save "index.d.ts"
     writeFileSync(join(typesDir, "index.d.ts"), jsonTypes, "utf-8");
