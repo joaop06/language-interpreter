@@ -44,7 +44,7 @@ describe("generateTypes", () => {
      *
      * Example file 1
      */
-    const typeExample1FilePath = join(testDir, "types", "example1.d.ts");
+    const typeExample1FilePath = join(testDir, "types", "example1.ts");
     const typeExample1FileContent = readFileSync(typeExample1FilePath, "utf-8");
 
     expect(typeExample1FileContent).toContain("key1: string;");
@@ -53,7 +53,7 @@ describe("generateTypes", () => {
     /**
      * Example file 2
      */
-    const typeExample2FilePath = join(testDir, "types", "example2.d.ts");
+    const typeExample2FilePath = join(testDir, "types", "example2.ts");
     const typeExample2FileContent = readFileSync(typeExample2FilePath, "utf-8");
 
     expect(typeExample2FileContent).toContain("nested: {");
@@ -71,6 +71,29 @@ describe("generateTypes", () => {
     );
 
     FileLoader.generateTypes(testDir);
+
+    // Checks that the type file has been created and contains the correct types
+    const typeIndexFilePath = join(testDir, "types", "index.ts");
+    expect(existsSync(typeIndexFilePath)).toBe(true);
+
+    const typeFilePath = join(testDir, "types", "example3.ts");
+
+    const typeFileContent = readFileSync(typeFilePath, "utf-8");
+    expect(typeFileContent).toContain("export default Example3;");
+    expect(typeFileContent).toContain("key3: string;");
+  });
+
+  it("must handle directories with subdirectories correctly with declarations (index.d.ts)", async () => {
+    await sleep();
+
+    // Creates a directory structure with subdirectories and JSON files
+    mkdirSync(join(testDir, "subdir"));
+    writeFileSync(
+      join(testDir, "subdir", "example3.json"),
+      JSON.stringify({ key3: "value3" }),
+    );
+
+    FileLoader.generateTypes(testDir, true);
 
     // Checks that the type file has been created and contains the correct types
     const typeIndexFilePath = join(testDir, "types", "index.d.ts");
@@ -100,6 +123,21 @@ describe("generateTypes", () => {
     await sleep();
 
     FileLoader.generateTypes(testDir);
+
+    // Checks that the type file has been created, even if the directory is empty
+    const typeIndexFilePath = join(testDir, "types", "index.ts");
+    expect(existsSync(typeIndexFilePath)).toBe(true);
+
+    // Checks if the type file is empty (only with the basic structure)
+    const typeFileContent = readFileSync(typeIndexFilePath, "utf-8");
+    expect(typeFileContent).toContain("export type LanguagesTypes = any;");
+    expect(typeFileContent).toContain("export type LanguageNamesTypes = any;");
+  });
+
+  it("must handle empty directories correctly with declarations (index.d.ts)", async () => {
+    await sleep();
+
+    FileLoader.generateTypes(testDir, true);
 
     // Checks that the type file has been created, even if the directory is empty
     const typeIndexFilePath = join(testDir, "types", "index.d.ts");

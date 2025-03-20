@@ -96,7 +96,7 @@ export class FileLoader<T = any> {
    *
    * @param {string} baseDir - The base directory containing the JSON files.
    */
-  static generateTypes(baseDir: string) {
+  static generateTypes(baseDir: string, exportTypeDeclaration: boolean = false) {
     // List of file names used to generate type imports/exports
     const fileNames = [];
 
@@ -128,7 +128,8 @@ export class FileLoader<T = any> {
             const content = this.generateTypeDefinationJSON(readFile);
 
             // Generate type definition file
-            const typeFilePath = join(typesDir, `${name}.d.ts`);
+            const extFile = !!exportTypeDeclaration ? "d.ts" : "ts";
+            const typeFilePath = join(typesDir, `${name}.${extFile}`);
             writeFileSync(
               typeFilePath,
               `type ${nameTitle} = {\n${content}\n};\n\nexport default ${nameTitle};\n`,
@@ -144,7 +145,7 @@ export class FileLoader<T = any> {
     recursiveFileStructure(baseDir);
 
     // Generate the index.d.ts file to export all types
-    this.generateIndexFile(typesDir, fileNames);
+    this.generateIndexFile(typesDir, fileNames, exportTypeDeclaration);
   }
 
   /**
@@ -200,7 +201,7 @@ export class FileLoader<T = any> {
    * @param {string} typesDir - The directory containing the type files.
    * @param {string[]} fileNames - The list of generated file names.
    */
-  private static generateIndexFile(typesDir: string, fileNames: string[]) {
+  private static generateIndexFile(typesDir: string, fileNames: string[], exportTypeDeclaration: boolean) {
     // Generate imports and exports for each type definition
 
     const imports = fileNames
@@ -227,7 +228,8 @@ export type LanguageNamesTypes = ${namesToLanguageNamesTypes};\n
 /**\n * Enum to represent the names of JSON files\n */
 export enum LanguagesEnum {${namesToLanguagesEnum},\n};\n`;
 
-    // Save "index.d.ts"
-    writeFileSync(join(typesDir, "index.d.ts"), jsonTypes, "utf-8");
+    // Save "index" file
+    const extFile = !!exportTypeDeclaration ? "d.ts" : "ts";
+    writeFileSync(join(typesDir, `index.${extFile}`), jsonTypes, "utf-8");
   }
 }

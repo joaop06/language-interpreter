@@ -21,7 +21,7 @@ export class Interpreter<T = string> {
    * @throws {Exception} If the locales path is not found.
    */
   constructor(config: Config) {
-    const { localesPath, defaultLanguage } = config;
+    const { localesPath, defaultLanguage, exportTypeDeclaration = false } = config;
 
     // Verify that the locales path exists
     if (!existsSync(resolve(localesPath))) {
@@ -29,7 +29,7 @@ export class Interpreter<T = string> {
     }
 
     // Generate TypeScript types based on JSON files in the locales path
-    FileLoader.generateTypes(localesPath);
+    FileLoader.generateTypes(localesPath, exportTypeDeclaration);
 
     // Initialize the file loader with the provided locales path
     this.fileLoader = FileLoader.init(localesPath);
